@@ -3,14 +3,17 @@ import React, {Component, useState} from 'react';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+// import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import SplashScreen from './components/begin/splashScreen';
 import Home from './components/begin/home';
 import HomeAdmin from './components/admin/homeAdmin';
 import HomeDokter from './components/dokter/homeDokter';
 import HomePasien from './components/pasien/homePasien';
+import Router from './components/begin/router';
 
 const Stack = createStackNavigator();
+// const Tab = createBottomTabNavigator();
 
 class App extends Component {
   constructor(props) {
@@ -42,8 +45,16 @@ class App extends Component {
       return <SplashScreen />;
     }
     return (
+      // <Router />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator
+          initialRouteName="HomePasien"
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#E00000',
+            },
+            headerTintColor: '#fff',
+          }}>
           {/* <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
@@ -51,10 +62,34 @@ class App extends Component {
               headerShown: false,
             }}
           /> */}
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="HomePasien" component={HomePasien} />
-          <Stack.Screen name="HomeDokter" component={HomeDokter} />
-          <Stack.Screen name="HomeAdmin" component={HomeAdmin} />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              title: 'My home',
+            }}
+          />
+          <Stack.Screen
+            name="HomePasien"
+            component={HomePasien}
+            options={{
+              title: 'Home',
+            }}
+          />
+          <Stack.Screen
+            name="HomeDokter"
+            component={HomeDokter}
+            options={{
+              title: 'Home',
+            }}
+          />
+          <Stack.Screen
+            name="HomeAdmin"
+            component={HomeAdmin}
+            options={{
+              title: 'Home',
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
