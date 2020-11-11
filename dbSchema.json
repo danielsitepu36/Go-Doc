@@ -1,0 +1,45 @@
+{
+    "pasien":{
+        "gmail":"daniel@mail.com",
+        "nama":"daniel",
+        "umur":"20",
+        "alamat":"jakarta",
+        "noTelp":"0123456"
+    },
+    "dokter":{
+        "gmail":"dokter@mail.com",
+        "nama":"rian",
+        "umur":"22",
+        "alamat":"yogyakarta",
+        "noTelp":"0123456",
+        "noSTR":"123123123",
+        "spesialis":"Umum",
+        "statusVerifikasi":"menunggu"
+    },
+    "periksa":{
+        "idPeriksa":"dba81b2b8un12bu8dn1u",
+        "idPasien":"ajndii1nd89u1nu2n192",
+        "idDokter":"awdwdhaybndiadwhndh",
+        "waktuPeriksa":"(DATE)",
+        "diterima": "menunggu",
+        "idRekamMedis":"",
+        "idReminderObat":["dawindjawdn","dawnjdnnwajd"],
+        "namaPenyakit":""
+    },
+    "riwayat":{
+        "idPasien":"ajndii1nd89u1nu2n192",
+        "idPeriksa":["dba81b2b8un12bu8dn1u"]
+    },
+    "idRekamMedis":{
+        "idRekamMedis":"adwwdawaddwadawdad",
+        "dataPenyakit":"sakit",
+        "keterangan":"sehat"
+    },
+    "reminderObat":{
+        "idReminder":"dawindjawdn",
+        "idPasien":"ajndii1nd89u1nu2n192",
+        "namaObat":"awdwdhaybndiadwhndh",
+        "jadwalMinumObat":"STRING? 2x sehari",
+        "muted": false
+    }
+}

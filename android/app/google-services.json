@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1015789846201",
+    "firebase_url": "https://go-doc-ad60f.firebaseio.com",
+    "project_id": "go-doc-ad60f",
+    "storage_bucket": "go-doc-ad60f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015789846201:android:52513b5438e0aa7232e568",
+        "android_client_info": {
+          "package_name": "com.godoc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015789846201-tcn8443huaghg7rsjm921n3cd7vsj1rv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.godoc",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1015789846201-ouivu783us3flbfc9rpiplf6ot0mi2oq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTfOJiP5KH_h1ozA8sss7wtOlgTXW50Vo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015789846201-ouivu783us3flbfc9rpiplf6ot0mi2oq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

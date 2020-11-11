@@ -11,41 +11,42 @@ import HomeAdmin from './components/admin/homeAdmin';
 import HomeDokter from './components/dokter/homeDokter';
 import HomePasien from './components/pasien/homePasien';
 import Router from './components/begin/router';
+import * as RouteNavigator from './components/RootNavigation';
+import Login from './components/begin/login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// TODO: implement login
+// Jadi flownya gini
+// 1) Open app, cek localStorage, kalo ada dia ga lewat login
+// 2) Kalo belom login, ke login (Ini 1 2 ditaruh di App / splash)
+// 3) Habis login, datanya dimasukin firebase & local (ini di login)
+// dah
+// Prioritas: Firestore akses & login
+// Kalau mau sebenernya bikin screen menu dulu aja.. passing user bisa blakang
+// Jadi yg penting kita bisa liat list kategori & jadwal dokter
+// User kosongan gapap
+// At least ada fitur useful disini yg bisa dikumpul
 
 const Stack = createStackNavigator();
 // const Tab = createBottomTabNavigator();
 
-class App extends Component {
+export default class App extends Component {
+  state = {
+    userinf: null,
+  };
   constructor(props) {
     super(props);
-
     this.state = {isLoading: true};
   }
 
-  performTimeConsumingTask = async () => {
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve('result');
-      }, 2000),
-    );
-  };
-
-  async componentDidMount() {
-    // Preload data from an external API
-    // Preload data using AsyncStorage
-    const data = await this.performTimeConsumingTask();
-
-    if (data !== null) {
-      this.setState({isLoading: false});
-    }
-  }
-
   render() {
-    if (this.state.isLoading) {
-      return <SplashScreen />;
-    }
+    // if (this.state.isLoading) {
+    //   return <SplashScreen />;
+    // }
+    // if (this.data !== null) {
+    // this.props.navigation.navigate('Home');
+    // // <Router />
     return (
-      // <Router />
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="HomePasien"
@@ -56,12 +57,12 @@ class App extends Component {
             headerTintColor: '#fff',
           }}>
           {/* <Stack.Screen
-            name="SplashScreen"
-            component={SplashScreen}
-            options={{
-              headerShown: false,
-            }}
-          /> */}
+              name="SplashScreen"
+              component={SplashScreen}
+              options={{
+                headerShown: false,
+              }}
+            /> */}
           <Stack.Screen
             name="Home"
             component={Home}
@@ -71,9 +72,9 @@ class App extends Component {
           />
           <Stack.Screen
             name="HomePasien"
-            component={HomePasien}
+            component={Login}
             options={{
-              title: 'Home',
+              title: 'Login',
             }}
           />
           <Stack.Screen
@@ -95,5 +96,18 @@ class App extends Component {
     );
   }
 }
+// }
 
-export default App;
+// const AppContainer = createAppContainer(InitialNavigator);
+
+// class App extends React.Component {
+//   render() {
+//     return (
+//       <Provider>
+//         <AppContainer />
+//       </Provider>
+//     );
+//   }
+// }
+
+// export default App;
