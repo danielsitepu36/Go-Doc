@@ -1,153 +1,34 @@
 import React, {Component, useState} from 'react';
-
-import 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-// import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
-import SplashScreen from './components/begin/splashScreen';
-import Home from './components/begin/home';
-import HomeAdmin from './components/admin/homeAdmin';
-import HomeDokter from './components/dokter/homeDokter';
-import HomePasien from './components/pasien/homePasien';
-import Router from './components/begin/router';
-import * as RouteNavigator from './components/RootNavigation';
-// import Login from './components/begin/login';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Login from './src/login';
-
-// TODO: implement login
-// Jadi flownya gini
-// 1) Open app, cek localStorage, kalo ada dia ga lewat login
-// 2) Kalo belom login, ke login (Ini 1 2 ditaruh di App / splash)
-// 3) Habis login, datanya dimasukin firebase & local (ini di login)
-// dah
-// Prioritas: Firestore akses & login
-// Kalau mau sebenernya bikin screen menu dulu aja.. passing user bisa blakang
-// Jadi yg penting kita bisa liat list kategori & jadwal dokter
-// User kosongan gapap
-// At least ada fitur useful disini yg bisa dikumpul
-
-function LoginApp() {
-  // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  if (initializing) return null;
-
-  if (!user) {
-    return (
-      <View>
-        <Text>Login</Text>
-      </View>
-    );
-  }
-  {
-    console.log(user);
-  }
-  return (
-    <View>
-      <Text>Welcome {user.email}</Text>
-    </View>
-  );
-}
-
-const Stack = createStackNavigator();
-// const Tab = createBottomTabNavigator();
+import {loadUser} from './src/util/userStorage';
+import LoginFunct from './src/loginFunct';
+import Home from './src/home';
 
 export default class App extends Component {
-  render() {
-    return <Login />;
+  constructor() {
+    super();
+    this.state = {
+      loading: true,
+      isLogin: false,
+      user: {},
+    };
   }
 
-  // state = {
-  //   userinf: null,
-  // };
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {isLoading: true};
-  // }
+  componentDidMount() {
+    // const savedUser = loadUser();
+    loadUser().then((savedUser) => {
+      if (savedUser) {
+        this.setState({user: savedUser, isLogin: true});
+        console.log('SAVED_USER: ', savedUser);
+      }
+    });
+  }
 
-  // render() {
-  //   // if (this.state.isLoading) {
-  //   //   return <SplashScreen />;
-  //   // }
-  //   // if (this.data !== null) {
-  //   // this.props.navigation.navigate('Home');
-  //   // // <Router />
-  //   return (
-  //     <NavigationContainer>
-  //       <Stack.Navigator
-  //         initialRouteName="HomePasien"
-  //         screenOptions={{
-  //           headerStyle: {
-  //             backgroundColor: '#E00000',
-  //           },
-  //           headerTintColor: '#fff',
-  //         }}>
-  //         {/* <Stack.Screen
-  //             name="SplashScreen"
-  //             component={SplashScreen}
-  //             options={{
-  //               headerShown: false,
-  //             }}
-  //           /> */}
-  //         <Stack.Screen
-  //           name="Home"
-  //           component={Home}
-  //           options={{
-  //             title: 'My home',
-  //           }}
-  //         />
-  //         <Stack.Screen
-  //           name="HomePasien"
-  //           component={Login}
-  //           options={{
-  //             title: 'Login',
-  //           }}
-  //         />
-  //         <Stack.Screen
-  //           name="HomeDokter"
-  //           component={HomeDokter}
-  //           options={{
-  //             title: 'Home',
-  //           }}
-  //         />
-  //         <Stack.Screen
-  //           name="HomeAdmin"
-  //           component={HomeAdmin}
-  //           options={{
-  //             title: 'Home',
-  //           }}
-  //         />
-  //       </Stack.Navigator>
-  //     </NavigationContainer>
-  //   );
-  // }
+  render() {
+    const {loading, isLogin, user} = this.state;
+    if (isLogin) {
+      return <Home />;
+    } else {
+      return <LoginFunct />;
+    }
+  }
 }
-// }
-
-// const AppContainer = createAppContainer(InitialNavigator);
-
-// class App extends React.Component {
-//   render() {
-//     return (
-//       <Provider>
-//         <AppContainer />
-//       </Provider>
-//     );
-//   }
-// }
-
-// export default App;
