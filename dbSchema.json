@@ -4,7 +4,8 @@
         "nama":"daniel",
         "umur":"20",
         "alamat":"jakarta",
-        "noTelp":"0123456"
+        "noTelp":"0123456",
+        "photoURL":"adwadwdawdw"
     },
     "dokter":{
         "gmail":"dokter@mail.com",

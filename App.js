@@ -12,8 +12,9 @@ import HomeDokter from './components/dokter/homeDokter';
 import HomePasien from './components/pasien/homePasien';
 import Router from './components/begin/router';
 import * as RouteNavigator from './components/RootNavigation';
-import Login from './components/begin/login';
+// import Login from './components/begin/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Login from './src/login';
 
 // TODO: implement login
 // Jadi flownya gini
@@ -27,74 +28,113 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // User kosongan gapap
 // At least ada fitur useful disini yg bisa dikumpul
 
+function LoginApp() {
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+  if (!user) {
+    return (
+      <View>
+        <Text>Login</Text>
+      </View>
+    );
+  }
+  {
+    console.log(user);
+  }
+  return (
+    <View>
+      <Text>Welcome {user.email}</Text>
+    </View>
+  );
+}
+
 const Stack = createStackNavigator();
 // const Tab = createBottomTabNavigator();
 
 export default class App extends Component {
-  state = {
-    userinf: null,
-  };
-  constructor(props) {
-    super(props);
-    this.state = {isLoading: true};
+  render() {
+    return <Login />;
   }
 
-  render() {
-    // if (this.state.isLoading) {
-    //   return <SplashScreen />;
-    // }
-    // if (this.data !== null) {
-    // this.props.navigation.navigate('Home');
-    // // <Router />
-    return (
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="HomePasien"
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: '#E00000',
-            },
-            headerTintColor: '#fff',
-          }}>
-          {/* <Stack.Screen
-              name="SplashScreen"
-              component={SplashScreen}
-              options={{
-                headerShown: false,
-              }}
-            /> */}
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{
-              title: 'My home',
-            }}
-          />
-          <Stack.Screen
-            name="HomePasien"
-            component={Login}
-            options={{
-              title: 'Login',
-            }}
-          />
-          <Stack.Screen
-            name="HomeDokter"
-            component={HomeDokter}
-            options={{
-              title: 'Home',
-            }}
-          />
-          <Stack.Screen
-            name="HomeAdmin"
-            component={HomeAdmin}
-            options={{
-              title: 'Home',
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
+  // state = {
+  //   userinf: null,
+  // };
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {isLoading: true};
+  // }
+
+  // render() {
+  //   // if (this.state.isLoading) {
+  //   //   return <SplashScreen />;
+  //   // }
+  //   // if (this.data !== null) {
+  //   // this.props.navigation.navigate('Home');
+  //   // // <Router />
+  //   return (
+  //     <NavigationContainer>
+  //       <Stack.Navigator
+  //         initialRouteName="HomePasien"
+  //         screenOptions={{
+  //           headerStyle: {
+  //             backgroundColor: '#E00000',
+  //           },
+  //           headerTintColor: '#fff',
+  //         }}>
+  //         {/* <Stack.Screen
+  //             name="SplashScreen"
+  //             component={SplashScreen}
+  //             options={{
+  //               headerShown: false,
+  //             }}
+  //           /> */}
+  //         <Stack.Screen
+  //           name="Home"
+  //           component={Home}
+  //           options={{
+  //             title: 'My home',
+  //           }}
+  //         />
+  //         <Stack.Screen
+  //           name="HomePasien"
+  //           component={Login}
+  //           options={{
+  //             title: 'Login',
+  //           }}
+  //         />
+  //         <Stack.Screen
+  //           name="HomeDokter"
+  //           component={HomeDokter}
+  //           options={{
+  //             title: 'Home',
+  //           }}
+  //         />
+  //         <Stack.Screen
+  //           name="HomeAdmin"
+  //           component={HomeAdmin}
+  //           options={{
+  //             title: 'Home',
+  //           }}
+  //         />
+  //       </Stack.Navigator>
+  //     </NavigationContainer>
+  //   );
+  // }
 }
 // }
 
