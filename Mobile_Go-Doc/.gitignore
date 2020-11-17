@@ -59,4 +59,4 @@ buck-out/
 /ios/Pods/
 
 # google services
-/Mobile_Go-Doc/android/app/google-services.json
+android/app/google-services.json
