@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import {
@@ -14,60 +14,42 @@ import {
   FirestoreDocument,
 } from "@react-firebase/firestore";
 import { firebaseConfig } from "../util/config";
+import { Link } from "react-router-dom/";
+
+// MUI stuff
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
+import HomeNavbar from "../components/layout/HomeNavbar";
+import GodocLogo from "../assets/GodocArt.png";
+import { Typography } from "@material-ui/core";
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
-      // <FirebaseAuthProvider {...firebaseConfig} firebase={firebase}>
-      <div>
-        <button
-          onClick={async () => {
-            const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-            await firebase.auth().signInWithPopup(googleAuthProvider);
-          }}
-        >
-          Sign In with Google
-        </button>
-        <button
-          data-testid="signin-anon"
-          onClick={async () => {
-            await firebase.auth().signInAnonymously();
-          }}
-        >
-          Sign In Anonymously
-        </button>
-        <button
-          onClick={() => {
-            firebase.auth().signOut();
-          }}
-        >
-          Sign Out
-        </button>
-        {/* <FirebaseAuthConsumer>
-            {({ isSignedIn, user, providerId }) => {
-              return (
-                <pre style={{ height: 300, overflow: "auto" }}>
-                  {JSON.stringify({ isSignedIn, user, providerId }, null, 2)}
-                </pre>
-              );
+      <>
+        <HomeNavbar />
+        <div style={{ textAlign: "center" }}>
+          <img src={GodocLogo} width="400px" style={{ marginBottom: "30px" }} />
+          <Typography variant="h4" align="center">
+            Selamat datang di Go-Doc
+          </Typography>
+          <Button
+            style={{
+              backgroundColor: "#e00000",
+              color: "#fff",
+              marginTop: "10px",
             }}
-          </FirebaseAuthConsumer> */}
-        {/* <div>
-            <IfFirebaseAuthed>
-              {() => {
-                return <div>You are authenticated</div>;
-              }}
-            </IfFirebaseAuthed>
-            <IfFirebaseAuthedAnd
-              filter={({ providerId }) => providerId !== "anonymous"}
-            >
-              {({ providerId }) => {
-                return <div>You are authenticated with {providerId}</div>;
-              }}
-            </IfFirebaseAuthedAnd>
-          </div> */}
-      </div>
-      // </FirebaseAuthProvider>
+            component={Link}
+            to="/dashboard"
+          >
+            Lanjutkan ke Dashboard
+          </Button>
+        </div>
+      </>
     );
   }
 }
