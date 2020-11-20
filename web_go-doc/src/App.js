@@ -13,22 +13,29 @@ import {
 import { firebaseConfig } from "./util/config";
 
 // Components
-import Navbar from "./components/layout/Navbar";
-import Dashboard from "./pages/Dashboard";
+import Navbar from "./components/layout/HomeNavbar";
+import Dashboard from "./template/Dashboard";
 import Home from "./pages/Home";
 import Verification from "./pages/Verification";
+import Login from "./pages/Login";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: {},
+    };
+  }
   render() {
     return (
-      <FirebaseAuthProvider {...firebaseConfig} firebase={firebase}>
-        <IfFirebaseAuthed>
-          <Dashboard />
-        </IfFirebaseAuthed>
-        <IfFirebaseUnAuthed>
-          <Home />
-        </IfFirebaseUnAuthed>
-      </FirebaseAuthProvider>
+      <Router>
+        <div style={{ marginTop: 80 }}>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/dashboard" component={Verification} />
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
