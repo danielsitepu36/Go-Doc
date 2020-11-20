@@ -11,10 +11,12 @@ import Home from './home';
 import Art from '../resource/art1.svg';
 
 import {loadUser, saveUser, clearUser} from './util/userStorage';
+import { CommonActions } from '@react-navigation/native';
 
-export default function LoginFunct() {
+export default function LoginFunct(props) {
   const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState({});
+  const {navigation} = props;
 
   const _signIn = async () => {
     try {
@@ -27,6 +29,11 @@ export default function LoginFunct() {
         accessToken,
       );
       await auth().signInWithCredential(credential);
+      // navigation.navigate(Home);
+      navigation.dispatch(CommonActions.reset({
+        index: 1,
+        routes: [{name: 'Home', params: {isLogin: loggedIn}}]
+      }))
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
