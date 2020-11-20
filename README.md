@@ -1,4 +1,4 @@
-# Class Diagram for Praktikum PPL Project
+# Praktikum PPL Project
 
 ## GoDoc Application
 
@@ -10,8 +10,8 @@ Fransiskus Rian Wardana Putra - 18/427592/PA/18552
 
 Penulisan kode dalam tugas ini dilakukan bersama-sama dengan menggunakan Visual Studio Code Live Share sehingga terdapat satu commit dengan perubahan yang masif pada salah satu akun _contributor_.
 
-## Keterangan Program
+## Keterangan Project
 
-1. Program menggambarkan flow dari rancangan aplikasi Go-Doc, aplikasi penghubung transaksi antara dokter dan pasien secara online
-
-2. Terdapat 3 pengguna dari sistem aplikasi ini, yaitu admin, dokter, dan pasien dengan 3 rancangan aplikasi yang berbeda
+1. Aplikasi Go-Doc adalah aplikasi penghubung transaksi antara dokter dan pasien secara online
+2. Terdapat 3 pengguna dari sistem aplikasi ini, yaitu admin, dokter, dan pasien
+3. Aplikasi ini terdiri dari mobile application untuk pasien, serta web application untuk dokter dan admin
