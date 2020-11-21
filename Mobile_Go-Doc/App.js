@@ -1,16 +1,16 @@
 import 'react-native-gesture-handler';
 import React, {Component, useEffect, useReducer} from 'react';
-import {loadUser} from './src/util/userStorage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import {loadUser} from './src/util/userStorage';
 import LoginFunct from './src/loginFunct';
 import Home from './src/home';
 import SplashScreen from './src/splashScreen';
 
 const Stack = createStackNavigator();
 
-function Navigator({navigation}) {
+function App({navigation}) {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -21,68 +21,83 @@ function Navigator({navigation}) {
             loading: false,
             isLogin: action.isLogin,
           };
-        case 'LOGGED_IN':
-          return {
-            ...prevState,
-            isLogin: action.loggedIn,
-          };
       }
     },
     {
       loading: true,
       isLogin: false,
-      user: null,
+      user: {},
     },
   );
 
   useEffect(() => {
     const fetchData = () => {
       let userData;
+      let loggedIn;
       try {
-        // setTimeout(() => {
-        loadUser().then((data) => {
-          if (data) {
-            console.log(data);
-            userData = data;
-          }
-        });
-        // }, 2000);
+        setTimeout(() => {
+          loadUser().then((data) => {
+            if (data) {
+              console.log(data);
+              userData = data;
+              loggedIn = true;
+            }
+            dispatch({
+              type: 'FETCH_CREDS',
+              user: userData,
+              loading: false,
+              isLogin: loggedIn,
+            });
+          });
+        }, 1500);
       } catch (e) {
         console.log(e);
       }
-      dispatch({
-        type: 'FETCH_CREDS',
-        user: userData,
-        loading: false,
-      });
     };
     fetchData();
-    return () => dispatch({type: 'LOGGED_IN', loggedIn: true});
   }, []);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={state.isLogin ? 'Home' : 'LoginFunct'}>
+      <Stack.Navigator>
         {!state.loading ? (
-          <>
-            {console.log('login?:', state.isLogin)}
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{
-                title: 'Home',
-                // animationTypeForReplace: 'pop',
-              }}
-            />
-            <Stack.Screen
-              name="LoginFunct"
-              component={LoginFunct}
-              options={{
-                title: 'Sign In',
-                // animationTypeForReplace: 'pop',
-              }}
-            />
-          </>
+          state.isLogin ? (
+            <>
+              {console.log(state.isLogin)}
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{
+                  title: 'Home',
+                }}
+              />
+              <Stack.Screen
+                name="LoginFunct"
+                component={LoginFunct}
+                options={{
+                  title: 'Sign In',
+                }}
+              />
+            </>
+          ) : (
+            <>
+              {console.log(state.isLogin)}
+              <Stack.Screen
+                name="LoginFunct"
+                component={LoginFunct}
+                options={{
+                  title: 'Sign In',
+                }}
+              />
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{
+                  title: 'Home',
+                }}
+              />
+            </>
+          )
         ) : (
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
         )}
@@ -90,4 +105,4 @@ function Navigator({navigation}) {
     </NavigationContainer>
   );
 }
-export default Navigator;
+export default App;
