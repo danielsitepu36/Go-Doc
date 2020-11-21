@@ -11,7 +11,6 @@ GoogleSignin.configure({
 });
 
 export default function Home({route, navigation}) {
-
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -22,12 +21,11 @@ export default function Home({route, navigation}) {
         });
       } catch (e) {
         console.log('fetch data error from home');
-        console.log(e)
+        console.log(e);
       }
-    }
-    fetchData()
-  }, [])
-
+    };
+    fetchData();
+  }, []);
 
   const signOut = async () => {
     try {
@@ -54,6 +52,10 @@ export default function Home({route, navigation}) {
       <Text>Home Pasien</Text>
       <Text>Welcome, {user.nama}</Text>
       <TouchableOpacity>
+        <Button
+          onPress={() => navigation.navigate('Periksa', {dataUser: user})}
+          title="Periksa"
+        />
         <Button onPress={signOut} title="Sign Out" />
       </TouchableOpacity>
     </>

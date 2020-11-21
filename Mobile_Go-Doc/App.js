@@ -1,14 +1,9 @@
 import 'react-native-gesture-handler';
-import React, {Component, useEffect, useReducer} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import React, {useEffect, useReducer} from 'react';
 
 import {loadUser} from './src/util/userStorage';
-import LoginFunct from './src/loginFunct';
-import Home from './src/home';
-import SplashScreen from './src/splashScreen';
 
-const Stack = createStackNavigator();
+import {LoginRouter, HomeRouter, SplashScreenRouter} from './src/mainRouter';
 
 function App({navigation}) {
   const [state, dispatch] = useReducer(
@@ -57,52 +52,21 @@ function App({navigation}) {
     fetchData();
   }, []);
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {!state.loading ? (
-          state.isLogin ? (
-            <>
-              {console.log(state.isLogin)}
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{
-                  title: 'Home',
-                }}
-              />
-              <Stack.Screen
-                name="LoginFunct"
-                component={LoginFunct}
-                options={{
-                  title: 'Sign In',
-                }}
-              />
-            </>
-          ) : (
-            <>
-              {console.log(state.isLogin)}
-              <Stack.Screen
-                name="LoginFunct"
-                component={LoginFunct}
-                options={{
-                  title: 'Sign In',
-                }}
-              />
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{
-                  title: 'Home',
-                }}
-              />
-            </>
-          )
-        ) : (
-          <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+  return !state.loading ? (
+    state.isLogin ? (
+      <>
+        {console.log(state.isLogin)}
+
+        <HomeRouter />
+      </>
+    ) : (
+      <>
+        {console.log(state.isLogin)}
+        <LoginRouter />
+      </>
+    )
+  ) : (
+    <SplashScreenRouter />
   );
 }
 export default App;
