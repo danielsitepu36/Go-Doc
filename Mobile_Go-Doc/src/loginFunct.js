@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Button} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {
@@ -12,10 +12,9 @@ import Art from '../resource/art1.svg';
 import {loadUser, saveUser, clearUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
 
-export default function LoginFunct(props) {
+export default function LoginFunct({navigation}) {
   // const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState({});
-  const {navigation} = props;
 
   const _signIn = async () => {
     try {
