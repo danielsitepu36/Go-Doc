@@ -49,16 +49,20 @@ class Dashboard extends Component {
         //   idPasien: doc.data().idPasien,
         //   keluhan: doc.data().keluhan,
         //   diterima: doc.data().diterima,
+        //   rekamMedis: doc.data().rekamMedis,
         //   nama: "",
         // };
-        // await db
-        //   .doc(`/pasien/${doc.data().idPasien}`)
+        // db.doc(`/pasien/${doc.data().idPasien}`)
         //   .get()
         //   .then((pasienDoc) => {
-        //     // console.log(pasienDoc.data());
+        //     // console.log(pasienDoc.data().nama);
         //     periksa.nama = pasienDoc.data().nama;
+        //     // listPeriksa.push({ ...periksa, id: doc.id });
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
         //   });
-        // console.log(periksa.diterima);
+        // console.log(periksa);
         listPeriksa.push({ ...doc.data(), id: doc.id });
       });
       this.setState({ periksa: listPeriksa });
@@ -69,39 +73,52 @@ class Dashboard extends Component {
   render() {
     const user = this.props.user;
     let periksa = this.state.periksa.map((data) =>
-      data.diterima == "menunggu" ? (
+      data.diterima === "menunggu" ? (
         <Periksa key={data.id} periksa={data} />
       ) : null
     );
     let periksaDiterima = this.state.periksa.map((data) =>
-      data.diterima == "diterima" && data.rekamMedis.dataPenyakit == null ? (
+      data.diterima === "diterima" && data.rekamMedis.dataPenyakit == null ? (
         <Periksa key={data.id} periksa={data} />
       ) : null
     );
     let periksaDitolak = this.state.periksa.map((data) =>
-      data.diterima == "ditolak" ? (
+      data.diterima === "ditolak" ? (
         <Periksa key={data.id} periksa={data} />
       ) : null
     );
     let periksaDiperiksa = this.state.periksa.map((data) =>
-      data.diterima == "diterima" && data.rekamMedis.dataPenyakit != null ? (
+      data.diterima === "diterima" && data.rekamMedis.dataPenyakit != null ? (
         <Periksa key={data.id} periksa={data} />
       ) : null
     );
     return (
       <>
-        <DashboardNavbar />
-        {/* {console.log(this.state.periksa)} */}
-        <Typography>Daftar Antre Pasien</Typography>
-        {periksa}
-        <Typography>Daftar Pasien Diterima</Typography>
-        {periksaDiterima}
-        <Typography>Daftar Pasien Ditolak</Typography>
-        {periksaDitolak}
-        <Typography>Daftar Pasien Sudah Diperiksa</Typography>
-        {periksaDiperiksa}
-        {/* {console.log(this.props.user.photoURL)} */}
-        {/* <div>{this.state.uid}</div> */}
+        {/* <DashboardNavbar /> */}
+        <div>
+          {/* {console.log(this.state.periksa)} */}
+          <Typography variant="h5" style={{ marginTop: "50px" }}>
+            Daftar Antre Pasien
+          </Typography>
+          {periksa}
+          <Typography variant="h5" style={{ marginTop: "50px" }}>
+            Daftar Pasien Diterima
+          </Typography>
+          {periksaDiterima}
+          <Typography variant="h5" style={{ marginTop: "50px" }}>
+            Daftar Pasien Ditolak
+          </Typography>
+          {periksaDitolak}
+          <Typography
+            variant="h5"
+            style={{ marginTop: "50px", textAlign: "left" }}
+          >
+            Daftar Pasien Sudah Diperiksa
+          </Typography>
+          {periksaDiperiksa}
+          {/* {console.log(this.props.user.photoURL)} */}
+          {/* <div>{this.state.uid}</div> */}
+        </div>
       </>
     );
   }

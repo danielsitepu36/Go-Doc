@@ -16,6 +16,7 @@ import {
 } from "@react-firebase/firestore";
 import { firebaseConfig } from "../util/config";
 import Dashboard from "../pages/Dashboard";
+import DashboardNavbar from "../components/layout/DashboardNavbar";
 import Login from "./Login";
 
 class Verification extends Component {
@@ -24,7 +25,7 @@ class Verification extends Component {
       <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
         <FirebaseAuthConsumer>
           {({ isSignedIn, user, providerId }) => {
-            return isSignedIn ? <Dashboard user={user} /> : <Login />;
+            return isSignedIn ? <DashboardNavbar user={user} /> : <Login />;
           }}
         </FirebaseAuthConsumer>
       </FirebaseAuthProvider>
