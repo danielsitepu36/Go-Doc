@@ -3,7 +3,7 @@ import React, {useEffect, useReducer} from 'react';
 
 import {loadUser} from './src/util/userStorage';
 
-import {LoginRouter, HomeRouter, SplashScreenRouter} from './src/mainRouter';
+import {LoginRouter, HomeRouter, SplashScreenRouter} from './src/util/mainRouter';
 
 function App({navigation}) {
   const [state, dispatch] = useReducer(

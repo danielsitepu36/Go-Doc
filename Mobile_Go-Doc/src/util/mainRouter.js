@@ -2,10 +2,10 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import Home from './home';
-import LoginFunct from './loginFunct';
-import Periksa from './periksa';
-import SplashScreen from './splashScreen';
+import Home from '../home';
+import LoginFunct from '../loginFunct';
+import Periksa from '../periksa';
+import SplashScreen from '../splashScreen';
 
 const Stack = createStackNavigator();
 
