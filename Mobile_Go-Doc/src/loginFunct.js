@@ -7,14 +7,13 @@ import {
   statusCodes,
 } from '@react-native-community/google-signin';
 import firestore from '@react-native-firebase/firestore';
-import Home from './home';
 import Art from '../resource/art1.svg';
 
 import {loadUser, saveUser, clearUser} from './util/userStorage';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 
 export default function LoginFunct(props) {
-  const [loggedIn, setloggedIn] = useState(false);
+  // const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState({});
   const {navigation} = props;
 
@@ -22,18 +21,13 @@ export default function LoginFunct(props) {
     try {
       await GoogleSignin.hasPlayServices();
       const {accessToken, idToken} = await GoogleSignin.signIn();
-      setloggedIn(true);
+      // setloggedIn(true);
 
       const credential = auth.GoogleAuthProvider.credential(
         idToken,
         accessToken,
       );
       await auth().signInWithCredential(credential);
-      // navigation.navigate(Home);
-      navigation.dispatch(CommonActions.reset({
-        index: 1,
-        routes: [{name: 'Home', params: {isLogin: loggedIn}}]
-      }))
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -79,11 +73,18 @@ export default function LoginFunct(props) {
         console.log('SETUSER: ', data);
         setUser(data);
         saveUser(data);
+        console.log('will pass user:', user);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: 'Home', params: {passedUser: data}}],
+          }),
+        );
       })
       .catch((err) => {
         console.log(err);
       });
-    if (user) setloggedIn(true);
+    // if (user) setloggedIn(true);
   }
 
   useEffect(() => {
@@ -102,7 +103,7 @@ export default function LoginFunct(props) {
       auth()
         .signOut()
         .then(() => alert('Your are signed out!'));
-      setloggedIn(false);
+      // setloggedIn(false);
       setUser({});
       clearUser();
     } catch (error) {
@@ -113,27 +114,25 @@ export default function LoginFunct(props) {
   return (
     <>
       <View>
-        <View>
+        <View style={{justifyContent: 'center', alignContent: 'center'}}>
           <View>
             <Art />
           </View>
-          {!loggedIn && (
-            <GoogleSigninButton
-              style={{width: 250, height: 48}}
-              size={GoogleSigninButton.Size.Wide}
-              color={GoogleSigninButton.Color.White}
-              onPress={_signIn}
-            />
-          )}
+          <GoogleSigninButton
+            style={{width: 250, height: 48}}
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.White}
+            onPress={_signIn}
+          />
         </View>
         <View>
           {!user && <Text>You are currently logged out</Text>}
-          {user && (
+          {/* {user && (
             <View>
               <Text>Welcome {user.nama}</Text>
               <Button onPress={signOut} title="LogOut" color="red"></Button>
             </View>
-          )}
+          )} */}
         </View>
       </View>
     </>
