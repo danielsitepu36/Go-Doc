@@ -1,127 +1,264 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom/";
+import MyButton from "../util/MyButton";
 
-import { firebaseConfig, db } from "../util/config";
-import DashboardNavbar from "../components/layout/DashboardNavbar";
-import Periksa from "../components/Periksa";
-import { Typography } from "@material-ui/core";
+import DaftarPeriksa from "./DaftarPeriksa";
+
+import firebase from "firebase/app";
+import "firebase/auth";
+// // MUI stuff
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
+// // Icons
+import HomeIcon from "@material-ui/icons/Home";
+import GodocLogo from "../assets/GodocWhiteLogo.png";
 
 class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dokter: {},
-      isVerified: false,
-      uid: "",
-      periksa: [],
-    };
-  }
-
-  async componentDidMount() {
-    await db
-      .doc(`/dokter/${this.props.user.uid}`)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          this.setState({ dokter: doc.data() });
-        } else {
-          const newDokter = {
-            nama: this.props.user.displayName,
-            email: this.props.user.email,
-            photoURL: this.props.user.photoURL,
-            isVerified: false,
-          };
-          db.doc(`/dokter/${this.props.user.uid}`).set(newDokter);
-          this.setState({ dokter: doc.data() });
-        }
-        this.setState({ uid: this.props.user.uid });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    await db.collection("periksa").onSnapshot((data) => {
-      // console.log(data);
-      let listPeriksa = [];
-      data.forEach(async (doc) => {
-        // console.log(doc.data());
-        // let periksa = {
-        //   id: doc.id,
-        //   idDokter: doc.data().idDokter,
-        //   idPasien: doc.data().idPasien,
-        //   keluhan: doc.data().keluhan,
-        //   diterima: doc.data().diterima,
-        //   rekamMedis: doc.data().rekamMedis,
-        //   nama: "",
-        // };
-        // db.doc(`/pasien/${doc.data().idPasien}`)
-        //   .get()
-        //   .then((pasienDoc) => {
-        //     // console.log(pasienDoc.data().nama);
-        //     periksa.nama = pasienDoc.data().nama;
-        //     // listPeriksa.push({ ...periksa, id: doc.id });
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   });
-        // console.log(periksa);
-        listPeriksa.push({ ...doc.data(), id: doc.id });
-      });
-      this.setState({ periksa: listPeriksa });
-      // console.log(this.state.periksa[0].diterima);
-    });
-  }
-
   render() {
-    const user = this.props.user;
-    let periksa = this.state.periksa.map((data) =>
-      data.diterima === "menunggu" ? (
-        <Periksa key={data.id} periksa={data} />
-      ) : null
-    );
-    let periksaDiterima = this.state.periksa.map((data) =>
-      data.diterima === "diterima" && data.rekamMedis.dataPenyakit == null ? (
-        <Periksa key={data.id} periksa={data} />
-      ) : null
-    );
-    let periksaDitolak = this.state.periksa.map((data) =>
-      data.diterima === "ditolak" ? (
-        <Periksa key={data.id} periksa={data} />
-      ) : null
-    );
-    let periksaDiperiksa = this.state.periksa.map((data) =>
-      data.diterima === "diterima" && data.rekamMedis.dataPenyakit != null ? (
-        <Periksa key={data.id} periksa={data} />
-      ) : null
-    );
     return (
       <>
-        {/* <DashboardNavbar /> */}
-        <div>
-          {/* {console.log(this.state.periksa)} */}
-          <Typography variant="h5" style={{ marginTop: "50px" }}>
-            Daftar Antre Pasien
-          </Typography>
-          {periksa}
-          <Typography variant="h5" style={{ marginTop: "50px" }}>
-            Daftar Pasien Diterima
-          </Typography>
-          {periksaDiterima}
-          <Typography variant="h5" style={{ marginTop: "50px" }}>
-            Daftar Pasien Ditolak
-          </Typography>
-          {periksaDitolak}
-          <Typography
-            variant="h5"
-            style={{ marginTop: "50px", textAlign: "left" }}
-          >
-            Daftar Pasien Sudah Diperiksa
-          </Typography>
-          {periksaDiperiksa}
-          {/* {console.log(this.props.user.photoURL)} */}
-          {/* <div>{this.state.uid}</div> */}
-        </div>
+        <AppBar style={{ background: "#e00000" }}>
+          <Toolbar>
+            <Link to="/">
+              <img alt="" src={GodocLogo} width="150px" />
+            </Link>
+            <div style={{ marginLeft: "auto" }}>
+              <Button color="inherit" component={Link} to="/">
+                Home
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  firebase.auth().signOut();
+                }}
+              >
+                Logout
+              </Button>
+            </div>
+          </Toolbar>
+        </AppBar>
+        <DaftarPeriksa user={this.props.user} />
       </>
     );
   }
 }
 
 export default Dashboard;
+
+// import React from "react";
+// import clsx from "clsx";
+// import { makeStyles, useTheme } from "@material-ui/core/styles";
+// import Drawer from "@material-ui/core/Drawer";
+// import CssBaseline from "@material-ui/core/CssBaseline";
+// import AppBar from "@material-ui/core/AppBar";
+// import Toolbar from "@material-ui/core/Toolbar";
+// import List from "@material-ui/core/List";
+// import Typography from "@material-ui/core/Typography";
+// import Divider from "@material-ui/core/Divider";
+// import IconButton from "@material-ui/core/IconButton";
+// import MenuIcon from "@material-ui/icons/Menu";
+// import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+// import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+// import ListItem from "@material-ui/core/ListItem";
+// import ListItemIcon from "@material-ui/core/ListItemIcon";
+// import ListItemText from "@material-ui/core/ListItemText";
+// import InboxIcon from "@material-ui/icons/MoveToInbox";
+// import MailIcon from "@material-ui/icons/Mail";
+
+// const drawerWidth = 300;
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     display: "flex",
+//     marginTop: "-120px",
+//   },
+//   appBar: {
+//     transition: theme.transitions.create(["margin", "width"], {
+//       easing: theme.transitions.easing.sharp,
+//       duration: theme.transitions.duration.leavingScreen,
+//     }),
+//   },
+//   appBarShift: {
+//     width: `calc(100% - ${drawerWidth}px)`,
+//     marginLeft: drawerWidth,
+//     transition: theme.transitions.create(["margin", "width"], {
+//       easing: theme.transitions.easing.easeOut,
+//       duration: theme.transitions.duration.enteringScreen,
+//     }),
+//   },
+//   menuButton: {
+//     marginRight: theme.spacing(2),
+//   },
+//   hide: {
+//     display: "none",
+//   },
+//   drawer: {
+//     width: drawerWidth,
+//     flexShrink: 0,
+//   },
+//   drawerPaper: {
+//     width: drawerWidth,
+//   },
+//   drawerHeader: {
+//     display: "flex",
+//     alignItems: "center",
+//     padding: theme.spacing(0, 1),
+//     // necessary for content to be below app bar
+//     ...theme.mixins.toolbar,
+//     justifyContent: "flex-end",
+//   },
+//   content: {
+//     flexGrow: 1,
+//     padding: theme.spacing(3),
+//     transition: theme.transitions.create("margin", {
+//       easing: theme.transitions.easing.sharp,
+//       duration: theme.transitions.duration.leavingScreen,
+//     }),
+//     marginLeft: -drawerWidth,
+//   },
+//   contentShift: {
+//     transition: theme.transitions.create("margin", {
+//       easing: theme.transitions.easing.easeOut,
+//       duration: theme.transitions.duration.enteringScreen,
+//     }),
+//     marginLeft: 0,
+//   },
+// }));
+
+// export default function DashboardNavbar(user) {
+//   const classes = useStyles();
+//   const theme = useTheme();
+//   const [open, setOpen] = React.useState(false);
+
+//   const handleDrawerOpen = () => {
+//     setOpen(true);
+//   };
+
+//   const handleDrawerClose = () => {
+//     setOpen(false);
+//   };
+
+//   return (
+//     <div className={classes.root}>
+//       <CssBaseline />
+//       <AppBar
+//         position="fixed"
+//         className={clsx(classes.appBar, {
+//           [classes.appBarShift]: open,
+//         })}
+//       >
+//         <Toolbar>
+//           <IconButton
+//             color="inherit"
+//             aria-label="open drawer"
+//             onClick={handleDrawerOpen}
+//             edge="start"
+//             className={clsx(classes.menuButton, open && classes.hide)}
+//           >
+//             <MenuIcon />
+//           </IconButton>
+//           <Link to="/">
+//             <img src={GodocLogo} width="150px" />
+//           </Link>
+//           <div style={{ marginLeft: "auto" }}>
+//             <Button color="inherit" component={Link} to="/">
+//               Home
+//             </Button>
+//             <Button
+//               color="inherit"
+//               onClick={() => {
+//                 firebase.auth().signOut();
+//               }}
+//             >
+//               Logout
+//             </Button>
+//           </div>
+//         </Toolbar>
+//       </AppBar>
+//       <Drawer
+//         className={classes.drawer}
+//         variant="persistent"
+//         anchor="left"
+//         open={open}
+//         classes={{
+//           paper: classes.drawerPaper,
+//         }}
+//       >
+//         <div className={classes.drawerHeader}>
+//           <IconButton onClick={handleDrawerClose}>
+//             {theme.direction === "ltr" ? (
+//               <ChevronLeftIcon />
+//             ) : (
+//               <ChevronRightIcon />
+//             )}
+//           </IconButton>
+//         </div>
+//         <Divider />
+//         <List>
+//           {[
+//             "Daftar Antre Pasien",
+//             "Pasien Diterima",
+//             "Pasien Ditolak",
+//             "Pasien Sudah Diperiksa",
+//           ].map((text, index) => (
+//             <ListItem button key={text}>
+//               <ListItemIcon>
+//                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+//               </ListItemIcon>
+//               <ListItemText primary={text} />
+//             </ListItem>
+//           ))}
+//         </List>
+//         <Divider />
+//         <List>
+//           {["All mail", "Trash", "Spam"].map((text, index) => (
+//             <ListItem button key={text}>
+//               <ListItemIcon>
+//                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+//               </ListItemIcon>
+//               <ListItemText primary={text} />
+//             </ListItem>
+//           ))}
+//         </List>
+//       </Drawer>
+//       <main
+//         className={clsx(classes.content, {
+//           [classes.contentShift]: open,
+//         })}
+//       >
+//         <div className={classes.drawerHeader} />
+//         {/* <Typography paragraph>
+//           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+//           eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
+//           dolor purus non enim praesent elementum facilisis leo vel. Risus at
+//           ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
+//           quisque non tellus. Convallis convallis tellus id interdum velit
+//           laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
+//           adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
+//           integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
+//           eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
+//           quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
+//           vivamus at augue. At augue eget arcu dictum varius duis at consectetur
+//           lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
+//           faucibus et molestie ac.
+//         </Typography>
+//         <Typography paragraph>
+//           Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
+//           ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
+//           elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
+//           sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
+//           mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
+//           risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
+//           purus viverra accumsan in. In hendrerit gravida rutrum quisque non
+//           tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
+//           morbi tristique senectus et. Adipiscing elit duis tristique
+//           sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
+//           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
+//           posuere sollicitudin aliquam ultrices sagittis orci a.
+//         </Typography> */}
+//         <Dashboard user={user} />
+//       </main>
+//     </div>
+//   );
+// }

@@ -21,8 +21,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import HomeNavbar from "../components/layout/HomeNavbar";
-import GodocLogo from "../assets/GodocArt.png";
-import { Typography } from "@material-ui/core";
+import GodocArt from "../assets/GodocArt.png";
+import GodocLogo from "../assets/GodocLogo.png";
+import { Grid, Typography } from "@material-ui/core";
 
 class Home extends Component {
   constructor(props) {
@@ -32,23 +33,54 @@ class Home extends Component {
     return (
       <>
         <HomeNavbar />
-        <div style={{ textAlign: "center" }}>
-          <img src={GodocLogo} width="400px" style={{ marginBottom: "30px" }} />
-          <Typography variant="h4" align="center">
-            Selamat datang di Go-Doc
-          </Typography>
-          <Button
-            style={{
-              backgroundColor: "#e00000",
-              color: "#fff",
-              marginTop: "10px",
-            }}
-            component={Link}
-            to="/dashboard"
+        <Grid container style={{ padding: "100px" }}>
+          <Grid
+            item
+            lg={6}
+            md={12}
+            sm={12}
+            style={{ textAlign: "center", margin: "auto" }}
           >
-            Lanjutkan ke Dashboard
-          </Button>
-        </div>
+            <img
+              alt=""
+              src={GodocArt}
+              width="500px"
+              style={{ marginBottom: "20px" }}
+            />
+          </Grid>
+          <Grid
+            lg={6}
+            md={12}
+            sm={12}
+            style={{ textAlign: "center", margin: "auto" }}
+          >
+            <Typography
+              variant="h4"
+              align="center"
+              style={{ color: "#444444" }}
+            >
+              Halo, Selamat datang di
+              <img
+                src={GodocLogo}
+                width="120px"
+                style={{ marginLeft: "10px" }}
+              />
+            </Typography>
+            <Button
+              style={{
+                backgroundColor: "#e00000",
+                color: "#fff",
+                marginTop: "10px",
+                padding: "8px 15px",
+                borderRadius: "15px",
+              }}
+              component={Link}
+              to="/dashboard"
+            >
+              <Typography variant="h6">Mulai Periksa</Typography>
+            </Button>
+          </Grid>
+        </Grid>
       </>
     );
   }
