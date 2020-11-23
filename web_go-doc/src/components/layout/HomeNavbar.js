@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom/";
-import MyButton from "../../util/MyButton";
 
 // MUI stuff
 import AppBar from "@material-ui/core/AppBar";
@@ -8,14 +7,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 
 // Icons
-import HomeIcon from "@material-ui/icons/Home";
 import GodocWhiteLogo from "../../assets/GodocWhiteLogo.png";
 import Heart from "../../assets/Heart.png";
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  Typography,
-} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 class Navbar extends Component {
   render() {
@@ -24,7 +18,7 @@ class Navbar extends Component {
         <AppBar style={{ background: "#e00000" }}>
           <Toolbar>
             <Link to="/">
-              <img src={GodocWhiteLogo} width="150px" />
+              <img alt="" src={GodocWhiteLogo} width="150px" />
             </Link>
             <div style={{ marginLeft: "auto" }}>
               <Button color="inherit" component={Link} to="/">
@@ -52,7 +46,12 @@ class Navbar extends Component {
         >
           <Typography variant="subtitle1" style={{ color: "white" }}>
             Made with
-            <img src={Heart} width="20px" style={{ margin: "2px 8px" }} />
+            <img
+              alt=""
+              src={Heart}
+              width="20px"
+              style={{ margin: "2px 8px", verticalAlign: "middle" }}
+            />
             by Tepu, Rian, Adhit
           </Typography>
         </div>

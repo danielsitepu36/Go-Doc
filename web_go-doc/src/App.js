@@ -1,23 +1,10 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-import firebase from "firebase/app";
-import "firebase/auth";
-import {
-  FirebaseAuthProvider,
-  FirebaseAuthConsumer,
-  IfFirebaseAuthed,
-  IfFirebaseAuthedAnd,
-  IfFirebaseUnAuthed,
-} from "@react-firebase/auth";
-import { firebaseConfig } from "./util/config";
 
 // Components
-import Navbar from "./components/layout/HomeNavbar";
-import Dashboard from "./template/Dashboard";
 import Home from "./pages/Home";
 import Verification from "./pages/Verification";
-import Login from "./pages/Login";
 
 class App extends Component {
   constructor(props) {
