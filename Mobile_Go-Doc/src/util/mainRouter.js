@@ -6,6 +6,7 @@ import Home from '../home';
 import LoginFunct from '../loginFunct';
 import Periksa from '../periksa';
 import SplashScreen from '../splashScreen';
+import ListPeriksaAktif from '../listPeriksaAktif';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,11 @@ const dasar = (
       name="Periksa"
       component={Periksa}
       options={{title: 'Periksa'}}
+    />
+    <Stack.Screen
+      name="ListPeriksaAktif"
+      component={ListPeriksaAktif}
+      options={{title: 'Daftar Periksa Aktif'}}
     />
   </>
 );
@@ -41,7 +47,6 @@ export function HomeRouter() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
         {dasar}
         <Stack.Screen
           name="LoginFunct"
