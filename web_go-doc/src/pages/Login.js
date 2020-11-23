@@ -1,24 +1,9 @@
 import React, { Component } from "react";
 import firebase from "firebase/app";
-import "firebase/auth";
-import {
-  FirebaseAuthProvider,
-  FirebaseAuthConsumer,
-  IfFirebaseAuthed,
-  IfFirebaseAuthedAnd,
-} from "@react-firebase/auth";
-import {
-  FirestoreProvider,
-  FirestoreMutation,
-  FirestoreCollection,
-  FirestoreDocument,
-} from "@react-firebase/firestore";
-import { firebaseConfig, auth, db } from "../util/config";
 import HomeNavbar from "../components/layout/HomeNavbar";
 import { Button, Grid, Typography } from "@material-ui/core";
 
 import GodocArt from "../assets/GodocArt2.png";
-import GodocLogo from "../assets/GodocLogo.png";
 
 class Login extends Component {
   render() {

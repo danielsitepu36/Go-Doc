@@ -1,24 +1,7 @@
-import React, { Component, Fragment } from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
-import {
-  FirebaseAuthProvider,
-  FirebaseAuthConsumer,
-  IfFirebaseAuthed,
-  IfFirebaseAuthedAnd,
-} from "@react-firebase/auth";
-import {
-  FirestoreProvider,
-  FirestoreMutation,
-  FirestoreCollection,
-  FirestoreDocument,
-} from "@react-firebase/firestore";
-import { firebaseConfig } from "../util/config";
+import React, { Component } from "react";
 import { Link } from "react-router-dom/";
 
 // MUI stuff
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import HomeNavbar from "../components/layout/HomeNavbar";
 import GodocArt from "../assets/GodocArt.png";
@@ -26,9 +9,6 @@ import GodocLogo from "../assets/GodocLogo.png";
 import { Grid, Typography } from "@material-ui/core";
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <>
@@ -61,9 +41,14 @@ class Home extends Component {
             >
               Halo, Selamat datang di
               <img
+                alt=""
                 src={GodocLogo}
-                width="120px"
-                style={{ marginLeft: "10px" }}
+                width="150px"
+                style={{
+                  marginLeft: "10px",
+                  verticalAlign: "middle",
+                  paddingBottom: "10px",
+                }}
               />
             </Typography>
             <Button

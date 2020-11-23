@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { db } from "../../util/config";
-import { CardMedia, MenuItem, Modal } from "@material-ui/core";
+import { CardMedia, Modal } from "@material-ui/core";
 import dayjs from "dayjs";
 import TextField from "@material-ui/core/TextField";
 
@@ -59,6 +58,7 @@ class Periksa extends Component {
     await db
       .doc(`/periksa/${this.props.periksa.id}`)
       .update({
+        diterima: "diperiksa",
         rekamMedis: {
           dataPenyakit: this.state.dataPenyakit,
           keterangan: this.state.keterangan,
@@ -199,7 +199,7 @@ class Periksa extends Component {
       </Card>
     );
     const cekBody = (
-      <Card style={{ margin: "200px auto", width: "500px" }}>
+      <Card style={{ margin: "200px auto", maxWidth: "600px" }}>
         <CardContent style={{ textAlign: "center" }}>
           <Typography variant="h5">Cek Rekam Medis</Typography>
           <TextField
@@ -236,12 +236,23 @@ class Periksa extends Component {
           </Typography>
           <Typography>Keterangan:</Typography>
           <Typography>{periksa.rekamMedis.keterangan}</Typography> */}
+          <Button
+            style={{
+              backgroundColor: "#e00000",
+              color: "#fff",
+              marginTop: "10px",
+              padding: "8px 15px",
+            }}
+            onClick={() => this.handleClose()}
+          >
+            Tutup
+          </Button>
         </CardContent>
       </Card>
     );
     return (
       <div style={{ textAlign: "left" }}>
-        <Card style={{ marginBottom: "30px", maxWidth: "800px" }}>
+        <Card style={{ margin: "20px", Width: "700px" }}>
           <div style={{ display: "flex" }}>
             <CardMedia
               style={{ width: "120px" }}
@@ -265,36 +276,35 @@ class Periksa extends Component {
             </CardContent>
           </div>
 
-          {/* {periksa.diterima == "menunggu" ? ( */}
           <CardActions style={{ float: "right" }}>
-            {/* {periksa.diterima == "menunggu" ? ( */}
-            <Button
-              style={{
-                backgroundColor: "#e00000",
-                color: "#fff",
-                marginTop: "10px",
-                padding: "8px 15px",
-              }}
-              size="small"
-              onClick={() => this.terima()}
-            >
-              Terima
-            </Button>
-            {/* ) : null} */}
-            {/* {periksa.rekamMedis.dataPenyakit == null ? ( */}
-            <Button
-              style={{
-                backgroundColor: "#e00000",
-                color: "#fff",
-                marginTop: "10px",
-                padding: "8px 15px",
-              }}
-              size="small"
-              onClick={() => this.tolak()}
-            >
-              Tolak
-            </Button>
-            {/* ) : null} */}
+            {periksa.diterima === "menunggu" ? (
+              <>
+                <Button
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    marginTop: "10px",
+                    padding: "8px 15px",
+                  }}
+                  size="small"
+                  onClick={() => this.terima()}
+                >
+                  Terima
+                </Button>
+                <Button
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    marginTop: "10px",
+                    padding: "8px 15px",
+                  }}
+                  size="small"
+                  onClick={() => this.tolak()}
+                >
+                  Tolak
+                </Button>
+              </>
+            ) : null}
             {periksa.diterima === "diterima" &&
             periksa.rekamMedis.dataPenyakit == null ? (
               <Button

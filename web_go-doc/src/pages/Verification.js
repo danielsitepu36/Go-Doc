@@ -4,16 +4,7 @@ import "firebase/auth";
 import {
   FirebaseAuthProvider,
   FirebaseAuthConsumer,
-  IfFirebaseAuthed,
-  IfFirebaseUnAuthed,
-  IfFirebaseAuthedAnd,
 } from "@react-firebase/auth";
-import {
-  FirestoreProvider,
-  FirestoreMutation,
-  FirestoreCollection,
-  FirestoreDocument,
-} from "@react-firebase/firestore";
 import { firebaseConfig } from "../util/config";
 // import Dashboard from "../pages/Dashboard";
 import Dashboard from "./Dashboard";
