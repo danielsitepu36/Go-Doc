@@ -1,5 +1,6 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom/";
+import firebase from "firebase/app";
 
 // MUI stuff
 import AppBar from "@material-ui/core/AppBar";
@@ -17,14 +18,20 @@ class Navbar extends Component {
       <>
         <AppBar style={{ background: "#e00000" }}>
           <Toolbar>
-            <Link to="/">
+            <Link to="/admin">
               <img alt="" src={GodocWhiteLogo} width="150px" />
             </Link>
             <div style={{ marginLeft: "auto" }}>
-              <Button color="inherit" component={Link} to="/">
+              <Button color="inherit" component={Link} to="/admin">
                 Home
               </Button>
-              <Button color="inherit" component={Link} to="/dashboard">
+              <Button
+                color="inherit"
+                onClick={async () => {
+                  const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+                  await firebase.auth().signInWithPopup(googleAuthProvider);
+                }}
+              >
                 Dashboard
               </Button>
             </div>

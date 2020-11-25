@@ -7,16 +7,16 @@ import {
 } from "@react-firebase/auth";
 import { firebaseConfig } from "../util/config";
 // import Dashboard from "../pages/Dashboard";
-import Dashboard from "./Dashboard";
-import Login from "./Login";
+import HomeAdmin from "./HomeAdmin";
+import ValidateAdmin from "./ValidateAdmin";
 
-class Verification extends Component {
+class AdminConsumer extends Component {
   render() {
     return (
       <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
         <FirebaseAuthConsumer>
           {({ isSignedIn, user, providerId }) => {
-            return isSignedIn ? <Dashboard user={user} /> : <Login />;
+            return isSignedIn ? <ValidateAdmin user={user} /> : <HomeAdmin />;
           }}
         </FirebaseAuthConsumer>
       </FirebaseAuthProvider>
@@ -24,4 +24,4 @@ class Verification extends Component {
   }
 }
 
-export default Verification;
+export default AdminConsumer;

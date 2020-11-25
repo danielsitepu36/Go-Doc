@@ -1,19 +1,25 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom/";
+import firebase from "firebase/app";
 
 // MUI stuff
 import Button from "@material-ui/core/Button";
-import HomeNavbar from "../components/layout/HomeNavbar";
+import AdminNavbar from "../components/layout/AdminNavbar";
 import GodocArt from "../assets/GodocArt.png";
 import GodocLogo from "../assets/GodocLogo.png";
 import { Grid, Typography } from "@material-ui/core";
 
-class Home extends Component {
+class HomeAdmin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      notAdmin: false,
+    };
+  }
   render() {
     return (
       <>
-        <HomeNavbar />
-        <Grid container style={{ paddingTop: "100px" }}>
+        <AdminNavbar />
+        <Grid container style={{ padding: "100px" }}>
           <Grid
             item
             lg={6}
@@ -35,11 +41,11 @@ class Home extends Component {
             style={{ textAlign: "center", margin: "auto" }}
           >
             <Typography
-              variant="h4"
+              variant="h5"
               align="center"
               style={{ color: "#444444" }}
             >
-              Halo, Selamat datang di
+              Halo admin, Selamat datang di
               <img
                 alt=""
                 src={GodocLogo}
@@ -51,6 +57,9 @@ class Home extends Component {
                 }}
               />
             </Typography>
+            <Typography variant="h5" style={{ color: "#444444" }}>
+              Halaman ini khusus admin
+            </Typography>
             <Button
               style={{
                 backgroundColor: "#e00000",
@@ -59,10 +68,12 @@ class Home extends Component {
                 padding: "8px 15px",
                 borderRadius: "15px",
               }}
-              component={Link}
-              to="/dashboard"
+              onClick={async () => {
+                const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+                await firebase.auth().signInWithPopup(googleAuthProvider);
+              }}
             >
-              <Typography variant="h6">Mulai Periksa</Typography>
+              <Typography variant="h6">Ke Dashboard</Typography>
             </Button>
           </Grid>
         </Grid>
@@ -70,4 +81,4 @@ class Home extends Component {
     );
   }
 }
-export default Home;
+export default HomeAdmin;

@@ -87,10 +87,6 @@ class Periksa extends Component {
   render() {
     const periksa = this.props.periksa;
     const pasien = this.state.pasien;
-    const kelamin = [
-      { value: "L", label: "Laki-laki" },
-      { value: "P", label: "Perempuan" },
-    ];
     const time = dayjs(periksa.waktuPeriksa).format("HH:mm, DD MMMM YYYY");
     // var date = new Date(periksa.waktuPeriksa * 1000);
     // var time =

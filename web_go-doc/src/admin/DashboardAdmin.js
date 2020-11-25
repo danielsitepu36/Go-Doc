@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom/";
 
-import DaftarPeriksa from "./DaftarPeriksa";
-
 import firebase from "firebase/app";
 import "firebase/auth";
 // // MUI stuff
@@ -24,29 +22,28 @@ import ListItemText from "@material-ui/core/ListItemText";
 import GroupAdd from "@material-ui/icons/GroupAdd";
 import People from "@material-ui/icons/People";
 
+import DaftarDokter from "./DaftarDokter";
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dokter: this.props.dokter,
-      uid: this.props.uid,
-      filterPeriksa: "menunggu",
-      filterJudul: "Daftar Antre Pasien",
+      admin: this.props.admin,
+      filterDokter: "menunggu",
+      filterJudul: "Daftar Tunggu Dokter",
     };
   }
 
   async setDashboard(text) {
     await this.setState({ filterJudul: text });
-    if (text === "Daftar Antre Pasien") {
-      await this.setState({ filterPeriksa: "menunggu" });
-    } else if (text === "Pasien Diterima") {
-      await this.setState({ filterPeriksa: "diterima" });
-    } else if (text === "Pasien Ditolak") {
-      await this.setState({ filterPeriksa: "ditolak" });
-    } else if (text === "Pasien Telah Diperiksa") {
-      await this.setState({ filterPeriksa: "diperiksa" });
+    if (text === "Daftar Tunggu Dokter") {
+      await this.setState({ filterDokter: "menunggu" });
+    } else if (text === "Dokter Diterima") {
+      await this.setState({ filterDokter: "true" });
+    } else if (text === "Dokter Ditolak") {
+      await this.setState({ filterDokter: "false" });
     }
-    // console.log(this.state.filterPeriksa);
+    // console.log(this.state.filterDokter);
   }
 
   render() {
@@ -55,10 +52,10 @@ class Dashboard extends Component {
         <AppBar style={{ background: "#e00000" }}>
           <Toolbar>
             <Typography style={{ marginLeft: "275px" }} variant="h6">
-              Dashboard Dokter
+              Dashboard Admin
             </Typography>
             <div style={{ marginLeft: "auto" }}>
-              <Button color="inherit" component={Link} to="/">
+              <Button color="inherit" component={Link} to="/admin">
                 Home
               </Button>
               <Button
@@ -84,22 +81,21 @@ class Dashboard extends Component {
             width="150px"
             style={{ margin: "15px auto" }}
           />
-          <img
+          {/* <img
             alt=""
             src={this.state.dokter.photoURL}
             width="100px"
             style={{ margin: "15px auto" }}
-          />
+          /> */}
           <div style={{ width: "275px" }}>
             <Typography style={{ textAlign: "center" }} variant="h6">
-              {this.state.dokter.nama}
+              {this.state.admin.nama}
             </Typography>
             <List>
               {[
-                "Daftar Antre Pasien",
-                "Pasien Diterima",
-                "Pasien Ditolak",
-                "Pasien Telah Diperiksa",
+                "Daftar Tunggu Dokter",
+                "Dokter Diterima",
+                "Dokter Ditolak",
               ].map((text, index) => (
                 <ListItem
                   button
@@ -116,14 +112,12 @@ class Dashboard extends Component {
             <Divider />
           </div>
         </Drawer>
-        {console.log(this.state.dokter)}
-        <DaftarPeriksa
-          dokter={this.state.dokter}
-          uid={this.state.uid}
-          filterPeriksa={this.state.filterPeriksa}
+        <DaftarDokter
           filterJudul={this.state.filterJudul}
-          key={this.state.filterPeriksa}
+          filterDokter={this.state.filterDokter}
+          key={this.state.filterDokter}
         />
+        {/* {console.log(this.state.filterDokter)} */}
       </>
     );
   }

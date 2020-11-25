@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import "./App.css";
 
 // Components
 import Home from "./pages/Home";
-import Verification from "./pages/Verification";
+import AuthConsumer from "./pages/AuthConsumer";
+import NotFound from "./pages/NotFound";
+import AdminConsumer from "./admin/AdminConsumer";
 
 class App extends Component {
   constructor(props) {
@@ -16,10 +17,19 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div style={{ marginTop: 80 }}>
+        <div style={{ margin: "80px auto" }}>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/dashboard" component={Verification} />
+            <Route exact path="/dashboard" component={AuthConsumer} />
+            {/* <Route exact path="/notverified" component={NotVerified} />
+            <Route exact path="/waitVerified" component={WaitVerified} /> */}
+            {/* <Route
+              exact
+              path="/datadiri"
+              render={(props) => <DataDokter {...props} />}
+            /> */}
+            <Route exact path="/admin" component={AdminConsumer} />
+            <Route component={NotFound} />
           </Switch>
         </div>
       </Router>

@@ -1,46 +1,45 @@
 import React, { Component } from "react";
 
 import { db } from "../util/config";
-import Periksa from "../components/layout/Periksa";
+import Dokter from "../components/layout/Dokter";
 import { Typography } from "@material-ui/core";
 
 class DaftarPeriksa extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      periksa: [],
+      dokter: [],
     };
   }
 
   async componentDidMount() {
-    console.log(this.props.dokter);
+    // console.log(this.props.filterDokter);
     await db
-      .collection("periksa")
-      .where("idDokter", "==", `${this.props.uid}`)
-      .where("diterima", "==", `${this.props.filterPeriksa}`)
+      .collection("dokter")
+      .where("isVerified", "==", `${this.props.filterDokter}`)
       .onSnapshot((data) => {
         // console.log(data);
-        let listPeriksa = [];
+        let listDokter = [];
         data.forEach(async (doc) => {
-          console.log(this.props.filterPeriksa);
-          listPeriksa.push({ ...doc.data(), id: doc.id });
+          console.log(doc.data());
+          listDokter.push({ ...doc.data(), id: doc.id });
         });
-        this.setState({ periksa: listPeriksa });
+        this.setState({ dokter: listDokter });
       });
   }
 
   render() {
-    let periksa = this.state.periksa.map((data) => (
-      <Periksa key={data.id} periksa={data} />
+    let dokter = this.state.dokter.map((data) => (
+      <Dokter key={data.id} dokter={data} />
     ));
     return (
       <>
+        {/* {console.log(this.state.dokter)} */}
         <div style={{ textAlign: "center", marginLeft: "275px" }}>
-          {console.log(this.props.dokter)}
           <Typography variant="h5" style={{ marginTop: "50px" }}>
             {this.props.filterJudul}
           </Typography>
-          {periksa}
+          {dokter}
         </div>
       </>
     );
