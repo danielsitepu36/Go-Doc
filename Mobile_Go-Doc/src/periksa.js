@@ -16,7 +16,7 @@ export default function Periksa({route, navigation}) {
     <View>
         <Text>{namaPanggilan}, mau periksa apa hari ini?</Text>
       <TouchableOpacity>
-        <Button title="Lihat Reservasi Aktif" />
+        <Button title="Lihat Reservasi Aktif" onPress={() => navigation.navigate('ListPeriksaAktif')}/>
         <Button title="Buat Reservasi" />
       </TouchableOpacity>
     </View>

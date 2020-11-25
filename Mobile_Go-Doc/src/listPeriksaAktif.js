@@ -1,5 +1,5 @@
 import React, {useReducer, useEffect} from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {loadUser, saveUser} from './util/userStorage';
 
@@ -8,9 +8,10 @@ export default function ({navigation}) {
     (prevState, action) => {
       switch (action.type) {
         case 'FETCH_DOCTOR':
+          let doctor = action.data;
           return {
             ...prevState,
-            doctors: action.doctor,
+            doctors: {...state.doctors, doctor},
           };
         case 'FETCH_USER':
           return {
@@ -21,7 +22,7 @@ export default function ({navigation}) {
     },
     {
       user: {},
-      doctors: {},
+      doctors: [],
     },
   );
 
@@ -33,11 +34,11 @@ export default function ({navigation}) {
           if (data) {
             console.log(data);
             userData = data;
+            dispatch({
+              type: 'FETCH_USER',
+              user: userData,
+            });
           }
-          dispatch({
-            type: 'FETCH_USER',
-            user: userData,
-          });
         });
       } catch (e) {
         console.log(e);
@@ -46,21 +47,33 @@ export default function ({navigation}) {
     fetchData();
   }, []);
 
-//   useEffect(() => {
-//     const fetchDoctor = () => {
-//       let doctors;
-//       try {
-//         firestore().collection();
-//       } catch (e) {
-//         console.log(e);
-//       }
-//     };
-//   });
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      let doctors;
+      try {
+        doctors = await firestore()
+          .collection('dokter')
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((documentSnapshot) => {
+              dispatch({
+                type: 'FETCH_DOCTOR',
+                data: documentSnapshot,
+              });
+            });
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchDoctor();
+  });
 
   return (
     <>
       <View>
-        <Text></Text>
+          {console.log('doctors:', state.doctors)}
+        <Text>{state.doctors}</Text>
       </View>
     </>
   );
