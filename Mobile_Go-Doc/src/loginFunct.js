@@ -88,27 +88,11 @@ export default function LoginFunct({navigation}) {
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId:
-        '1015789846201-ouivu783us3flbfc9rpiplf6ot0mi2oq.apps.googleusercontent.com',
+      webClientId: '1015789846201-ouivu783us3flbfc9rpiplf6ot0mi2oq.apps.googleusercontent.com',
     });
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
-
-  const signOut = async () => {
-    try {
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-      auth()
-        .signOut()
-        .then(() => alert('Your are signed out!'));
-      // setloggedIn(false);
-      setUser({});
-      clearUser();
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <>
@@ -126,12 +110,6 @@ export default function LoginFunct({navigation}) {
         </View>
         <View>
           {!user && <Text>You are currently logged out</Text>}
-          {/* {user && (
-            <View>
-              <Text>Welcome {user.nama}</Text>
-              <Button onPress={signOut} title="LogOut" color="red"></Button>
-            </View>
-          )} */}
         </View>
       </View>
     </>

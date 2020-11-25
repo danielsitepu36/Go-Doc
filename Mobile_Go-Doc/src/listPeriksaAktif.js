@@ -1,80 +1,98 @@
-import React, {useReducer, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import React, {useEffect, useReducer, useState} from 'react';
+import {View, Text, Button, TouchableOpacity} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {loadUser, saveUser} from './util/userStorage';
 
-export default function ({navigation}) {
+export default function ListPeriksaAktif({route, navigation}) {
+  const db = firestore();
+  const {dataUser} = route.params;
+  const [userId, setUID] = useState('');
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'FETCH_DOCTOR':
-          let doctor = action.data;
+        case 'FETCH_PERIKSA':
           return {
             ...prevState,
-            doctors: {...state.doctors, doctor},
+            daftarPeriksa: action.periksa,
           };
-        case 'FETCH_USER':
+        case 'SET_UID':
           return {
             ...prevState,
-            user: action.user,
+            userId: action.UID,
           };
       }
     },
     {
-      user: {},
-      doctors: [],
+      daftarPeriksa: [],
+      userId: '',
     },
   );
 
   useEffect(() => {
-    const fetchData = () => {
-      let userData;
+    let isSubscribed = true;
+    const fetchData = async () => {
+      console.log('email: ', dataUser.gmail);
       try {
-        loadUser().then((data) => {
-          if (data) {
-            console.log(data);
-            userData = data;
-            dispatch({
-              type: 'FETCH_USER',
-              user: userData,
-            });
-          }
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchDoctor = async () => {
-      let doctors;
-      try {
-        doctors = await firestore()
-          .collection('dokter')
+        db.collection('pasien')
+          .where('gmail', '==', dataUser.gmail)
           .get()
           .then((querySnapshot) => {
-            querySnapshot.forEach((documentSnapshot) => {
-              dispatch({
-                type: 'FETCH_DOCTOR',
-                data: documentSnapshot,
-              });
+            querySnapshot.forEach((doc) => {
+              // setUID(doc.id);
+              dispatch({type: 'SET_UID', UID: doc.id});
             });
           });
       } catch (e) {
         console.log(e);
       }
+      console.log('UID:', state.userId, '=> gmail: ', dataUser.gmail);
     };
-    fetchDoctor();
-  });
+    fetchData();
+    return () => {
+      isSubscribed = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isSubscribed = true;
+    async function fetchPeriksa() {
+      let listPeriksa = [];
+      try {
+        await db
+          .collection('periksa')
+          .where('idPasien', '==', state.userId)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log('doc.data', doc.data());
+              listPeriksa.push(doc.data());
+            });
+            dispatch({type: 'FETCH_PERIKSA', periksa: listPeriksa});
+          });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchPeriksa();
+    return () => {
+      isSubscribed = false;
+    };
+  }, [state.userId]);
 
   return (
-    <>
-      <View>
-          {console.log('doctors:', state.doctors)}
-        <Text>{state.doctors}</Text>
-      </View>
-    </>
+    <View>
+      {console.log('uid:', state.userId)}
+      {console.log('data:', state.daftarPeriksa)}
+      <Text>List Periksa Aktif</Text>
+      <Text></Text>
+      {state.daftarPeriksa.map((item, key) => {
+        let date = new Date(item.waktuPeriksa);
+        console.log(date.toLocaleTimeString())
+        return (
+          <TouchableOpacity>
+            <Button title={date.toDateString({dateStyle: 'full'})} key={key} />
+          </TouchableOpacity>
+        );
+      })}
+    </View>
   );
 }

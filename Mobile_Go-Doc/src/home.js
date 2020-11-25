@@ -2,12 +2,13 @@ import React, {useState, useEffect} from 'react';
 import {Text, Button, TouchableOpacity} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {webClientId} from './util/config'
 import {loadUser, clearUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
 
 GoogleSignin.configure({
   webClientId:
-    '1015789846201-ouivu783us3flbfc9rpiplf6ot0mi2oq.apps.googleusercontent.com',
+    webClientId,
 });
 
 export default function Home({route, navigation}) {

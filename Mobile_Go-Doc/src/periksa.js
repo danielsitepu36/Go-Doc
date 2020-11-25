@@ -5,19 +5,18 @@ export default function Periksa({route, navigation}) {
   const {dataUser} = route.params;
   console.log('passedUser:', dataUser)
 
-  let user;
-  if (dataUser) {
-      user = dataUser;
-  }
-  let namaPanggilan = user.nama.split(' ');
-  namaPanggilan = namaPanggilan[0];
+  // let user;
+  // if (dataUser) {
+  //     user = dataUser;
+  // }
+  let namaPanggilan = dataUser.nama.split(' ')[0];
 
   return (
     <View>
-        <Text>{namaPanggilan}, mau periksa apa hari ini?</Text>
+        <Text>Halo {namaPanggilan}, mau periksa apa hari ini?</Text>
       <TouchableOpacity>
-        <Button title="Lihat Reservasi Aktif" onPress={() => navigation.navigate('ListPeriksaAktif')}/>
-        <Button title="Buat Reservasi" />
+        <Button title="Lihat Daftar Periksa" onPress={() => navigation.navigate('ListPeriksaAktif', {dataUser: dataUser})}/>
+        <Button title="Buat Reservasi" onPress={() => navigation.navigate('BuatReservasi', {dataUser: dataUser})}/>
       </TouchableOpacity>
     </View>
   );

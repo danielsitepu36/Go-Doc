@@ -7,6 +7,8 @@ import LoginFunct from '../loginFunct';
 import Periksa from '../periksa';
 import SplashScreen from '../splashScreen';
 import ListPeriksaAktif from '../listPeriksaAktif';
+import BuatReservasi from '../buatReservasi';
+import JadwalPraktikDokter from '../jadwalPraktikDokter';
 
 const Stack = createStackNavigator();
 
@@ -19,9 +21,19 @@ const dasar = (
       options={{title: 'Periksa'}}
     />
     <Stack.Screen
+      name="BuatReservasi"
+      component={BuatReservasi}
+      options={{title: 'Periksa'}}
+    />
+    <Stack.Screen
       name="ListPeriksaAktif"
       component={ListPeriksaAktif}
-      options={{title: 'Daftar Periksa Aktif'}}
+      options={{title: 'Periksa'}}
+    />
+    <Stack.Screen
+      name="JadwalPraktikDokter"
+      component={JadwalPraktikDokter}
+      options={{title: 'Periksa'}}
     />
   </>
 );
