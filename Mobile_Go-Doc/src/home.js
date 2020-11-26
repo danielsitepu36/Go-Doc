@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {webClientId} from './util/config';
 import {loadUser, clearUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
 import {Button, Text, Card, ThemeProvider} from 'react-native-elements';
+import UpdateProfil from './updateProfil';
 
 GoogleSignin.configure({
   webClientId: webClientId,
@@ -48,19 +49,29 @@ export default function Home({route, navigation}) {
     }
   };
 
+  if (user.tanggalLahir === '' || user.umur === '') {
+    // return <UpdateProfil />;
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'UpdateProfil'}],
+      }),
+    );
+  }
+
   return (
     <>
       <ThemeProvider>
         <Text h2>Welcome, {user.nama}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Periksa', {dataUser: user})}>
-          <Card>
-            <Card.Title>HELLO WORLD</Card.Title>
-            <Text style={{marginBottom: 10}}>
-              The idea with React Native Elements is more about component
-              structure than actual design.
-            </Text>
-          </Card>
-        </TouchableOpacity>
+        {/* <TouchableOpacity onPress={() => navigation.navigate('Periksa', {dataUser: user})}>
+            <Card>
+              <Card.Title>HELLO WORLD</Card.Title>
+              <Text style={{marginBottom: 10}}>
+                The idea with React Native Elements is more about component
+                structure than actual design.
+              </Text>
+            </Card>
+          </TouchableOpacity> */}
 
         <TouchableOpacity>
           <Button

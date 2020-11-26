@@ -1,6 +1,11 @@
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, {createRef} from 'react';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 import {createStackNavigator} from '@react-navigation/stack';
+import {GoogleSignin} from '@react-native-community/google-signin';
+import {webClientId} from './config';
+
+import {clearUser} from './userStorage';
 
 import Home from '../home';
 import LoginFunct from '../loginFunct';
@@ -9,32 +14,72 @@ import SplashScreen from '../splashScreen';
 import ListPeriksaAktif from '../listPeriksaAktif';
 import BuatReservasi from '../buatReservasi';
 import JadwalPraktikDokter from '../jadwalPraktikDokter';
-import {StyleSheet} from 'react-native';
+import UpdateProfil from '../updateProfil';
+import {StyleSheet, Button} from 'react-native';
+import {CommonActions} from '@react-navigation/native';
+
+GoogleSignin.configure({
+  webClientId: webClientId,
+});
 
 const Stack = createStackNavigator();
+
+const opt = {
+  headerStyle: {
+    backgroundColor: '#e00000',
+  },
+  headerTintColor: '#fff',
+};
+
+const signOut = async (navigation) => {
+  // navigation.navigate('LoginFunct')
+  try {
+    // await GoogleSignin.revokeAccess();
+    await GoogleSignin.signOut();
+    auth()
+      .signOut()
+      .then(() => alert('Your are signed out!'));
+    clearUser();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'LoginFunct'}],
+      }),
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const MyButton = (
+  <Button
+    onPress={() => {
+      signOut(navigation);
+    }}
+    title="Logout"
+    color="#e00000">
+    LogOut
+  </Button>
+);
 
 const dasar = (
   <>
     <Stack.Screen
       name="Home"
       component={Home}
-      options={{
+      options={({navigation, route}) => ({
         title: 'Home',
-        headerStyle: {
-          backgroundColor: '#e00000',
-        },
-        headerTintColor: '#fff',
-      }}
+        headerRight: () => MyButton,
+        ...opt,
+      })}
     />
     <Stack.Screen
       name="Periksa"
       component={Periksa}
       options={{
         title: 'Periksa',
-        headerStyle: {
-          backgroundColor: '#e00000',
-        },
-        headerTintColor: '#fff',
+        headerRight: () => MyButton,
+        ...opt,
       }}
     />
     <Stack.Screen
@@ -42,10 +87,8 @@ const dasar = (
       component={BuatReservasi}
       options={{
         title: 'Periksa',
-        headerStyle: {
-          backgroundColor: '#e00000',
-        },
-        headerTintColor: '#fff',
+        headerRight: () => MyButton,
+        ...opt,
       }}
     />
     <Stack.Screen
@@ -53,10 +96,8 @@ const dasar = (
       component={ListPeriksaAktif}
       options={{
         title: 'Periksa',
-        headerStyle: {
-          backgroundColor: '#e00000',
-        },
-        headerTintColor: '#fff',
+        headerRight: () => MyButton,
+        ...opt,
       }}
     />
     <Stack.Screen
@@ -64,10 +105,17 @@ const dasar = (
       component={JadwalPraktikDokter}
       options={{
         title: 'Periksa',
-        headerStyle: {
-          backgroundColor: '#e00000',
-        },
-        headerTintColor: '#fff',
+        headerRight: () => MyButton,
+        ...opt,
+      }}
+    />
+    <Stack.Screen
+      name="UpdateProfil"
+      component={UpdateProfil}
+      options={{
+        title: 'Update Profil',
+        headerRight: () => MyButton ,
+        ...opt,
       }}
     />
   </>
@@ -82,10 +130,8 @@ export function LoginRouter() {
           component={LoginFunct}
           options={{
             title: 'Sign In',
-            headerStyle: {
-              backgroundColor: '#e00000',
-            },
-            headerTintColor: '#fff',
+            ...opt,
+            headerShown: false,
           }}
         />
         {dasar}
@@ -104,10 +150,15 @@ export function HomeRouter() {
           component={LoginFunct}
           options={{
             title: 'Sign In',
-            headerStyle: {
-              backgroundColor: '#e00000',
-            },
-            headerTintColor: '#fff',
+            headerRight: () => (
+              <Button
+                onPress={() => alert('This is a button!')}
+                title="Info"
+                color="#fff"
+              />
+            ),
+            ...opt,
+            headerShown: false,
           }}
         />
       </Stack.Navigator>

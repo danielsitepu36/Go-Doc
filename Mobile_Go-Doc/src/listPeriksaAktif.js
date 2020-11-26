@@ -1,5 +1,12 @@
 import React, {useEffect, useReducer, useState} from 'react';
-import {View, Text, Button, TouchableOpacity, Modal} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {Card} from 'react-native-elements';
 
@@ -65,7 +72,7 @@ export default function ListPeriksaAktif({route, navigation}) {
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               console.log('doc.data', doc.data());
-              listPeriksa.push(doc.data());
+              listPeriksa.push([doc.data(), doc.id]);
             });
             dispatch({type: 'FETCH_PERIKSA', periksa: listPeriksa});
           });
@@ -80,14 +87,14 @@ export default function ListPeriksaAktif({route, navigation}) {
   }, [state.userId]);
 
   return (
-    <>
-      <View>
+    <View style={{flex:1}}>
+      <View style={{marginBottom: 20}}>
         {console.log('uid:', state.userId)}
         {console.log('data:', state.daftarPeriksa)}
-        <Text>List Periksa Aktif</Text>
+        <Text style={{fontSize: 24, paddingLeft: 20, paddingTop: 10}}>List Periksa Aktif</Text>
       </View>
 
-      <View>
+      {/* <View>
         <Modal animationType='slide'>
           <View>
             <Card>
@@ -99,23 +106,28 @@ export default function ListPeriksaAktif({route, navigation}) {
             </Card>
           </View>
         </Modal>
-      </View>
+      </View> */}
 
-      <View>
-        <Text></Text>
-        {state.daftarPeriksa.map((item, key) => {
-          let date = new Date(item.waktuPeriksa);
-          console.log(date.toLocaleTimeString());
-          return (
-            <TouchableOpacity>
-              <Button
-                title={date.toDateString({dateStyle: 'full'})}
-                key={key}
-              />
-            </TouchableOpacity>
-          );
-        })}
+      <View style={{flex: 1}}>
+        <FlatList
+          data={state.daftarPeriksa}
+          keyExtractor={(item) => item[1]}
+          renderItem={({item}) => {
+            let date = new Date(item[0].waktuPeriksa);
+            console.log(date.toLocaleTimeString());
+            return (
+              <TouchableOpacity>
+                <Button
+                  title={date.toDateString({dateStyle: 'full'})}
+                />
+              </TouchableOpacity>
+            );
+          }}
+        />
+        {/* {state.daftarPeriksa.map((item, key) => {
+            
+          })} */}
       </View>
-    </>
+    </View>
   );
 }

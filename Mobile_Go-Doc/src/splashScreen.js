@@ -7,7 +7,7 @@ export default function SplashScreen({navigation}) {
   return (
     <>
       <View style={styles.logo}>
-        <Image source={GodocLogo} style={{width:"70%"}}/>
+        <Image source={GodocLogo} style={{width:"70%",}}/>
       </View>
     </>
   );
@@ -16,6 +16,7 @@ export default function SplashScreen({navigation}) {
 const styles = StyleSheet.create({
   logo: {
     flex: 1,
+    marginTop: -100,
     justifyContent: 'center',
     alignItems: 'center',
   },

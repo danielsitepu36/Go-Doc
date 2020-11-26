@@ -13,7 +13,7 @@ export default function Periksa({route, navigation}) {
 
   return (
     <View>
-      <Text>Halo {namaPanggilan}, mau periksa apa hari ini?</Text>
+      <Text style={{fontSize: 18, margin: 5, marginBottom: 20}}>Halo {namaPanggilan}, mau apa hari ini?</Text>
       <TouchableOpacity>
         <Button
           title="Lihat Daftar Periksa"
