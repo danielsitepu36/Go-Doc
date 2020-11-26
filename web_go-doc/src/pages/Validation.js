@@ -16,13 +16,13 @@ class Validation extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props.user);
+    // console.log(this.props.user);
     await db
       .doc(`/dokter/${this.props.user.uid}`)
       .get()
       .then(async (doc) => {
         if (doc.exists) {
-          console.log("exist");
+          // console.log("exist");
           this.setState({ dokter: doc.data() });
           // console.log(this.state.dokter);
         } else {
@@ -37,7 +37,7 @@ class Validation extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }
 

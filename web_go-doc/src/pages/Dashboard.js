@@ -23,6 +23,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import GroupAdd from "@material-ui/icons/GroupAdd";
 import People from "@material-ui/icons/People";
+import Folder from "@material-ui/icons/Folder";
+import RekamMedis from "./RekamMedis";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -32,11 +34,12 @@ class Dashboard extends Component {
       uid: this.props.uid,
       filterPeriksa: "menunggu",
       filterJudul: "Daftar Antre Pasien",
+      rekamMedis: false,
     };
   }
 
   async setDashboard(text) {
-    await this.setState({ filterJudul: text });
+    await this.setState({ filterJudul: text, rekamMedis: false });
     if (text === "Daftar Antre Pasien") {
       await this.setState({ filterPeriksa: "menunggu" });
     } else if (text === "Pasien Diterima") {
@@ -114,16 +117,30 @@ class Dashboard extends Component {
               ))}
             </List>
             <Divider />
+            <ListItem
+              button
+              onClick={() => this.setState({ rekamMedis: true })}
+            >
+              <ListItemIcon>
+                {/* {console.log(this.state.rekamMedis)} */}
+                <Folder />
+              </ListItemIcon>
+              <ListItemText primary={"Cari Rekam Medis"} />
+            </ListItem>
           </div>
         </Drawer>
-        {console.log(this.state.dokter)}
-        <DaftarPeriksa
-          dokter={this.state.dokter}
-          uid={this.state.uid}
-          filterPeriksa={this.state.filterPeriksa}
-          filterJudul={this.state.filterJudul}
-          key={this.state.filterPeriksa}
-        />
+        {/* {console.log(this.state.dokter)} */}
+        {this.state.rekamMedis === false ? (
+          <DaftarPeriksa
+            dokter={this.state.dokter}
+            uid={this.state.uid}
+            filterPeriksa={this.state.filterPeriksa}
+            filterJudul={this.state.filterJudul}
+            key={this.state.filterPeriksa}
+          />
+        ) : (
+          <RekamMedis />
+        )}
       </>
     );
   }

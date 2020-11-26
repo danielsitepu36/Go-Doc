@@ -21,7 +21,7 @@ class DaftarPeriksa extends Component {
         // console.log(data);
         let listDokter = [];
         data.forEach(async (doc) => {
-          console.log(doc.data());
+          // console.log(doc.data());
           listDokter.push({ ...doc.data(), id: doc.id });
         });
         this.setState({ dokter: listDokter });

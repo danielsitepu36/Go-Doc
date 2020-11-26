@@ -19,7 +19,7 @@ class ValidateAdmin extends Component {
       .get()
       .then(async (doc) => {
         if (doc.exists) {
-          console.log("exist");
+          // console.log("exist");
           this.setState({ admin: doc.data() });
           // console.log(this.state.dokter);
         } else {
@@ -27,12 +27,12 @@ class ValidateAdmin extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }
 
   render() {
-    console.log(this.state.admin);
+    // console.log(this.state.admin);
     if (this.state.admin.status !== false) {
       return <DashboardAdmin admin={this.state.admin} uid={this.state.uid} />;
     } else return <NotAdmin />;

@@ -29,6 +29,7 @@ class Home extends Component {
             />
           </Grid>
           <Grid
+            item
             lg={6}
             md={12}
             sm={12}
