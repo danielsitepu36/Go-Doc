@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {Text, Button, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-community/google-signin';
-import {webClientId} from './util/config'
+import {webClientId} from './util/config';
 import {loadUser, clearUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
+import {Button, Text, Card, ThemeProvider} from 'react-native-elements';
 
 GoogleSignin.configure({
-  webClientId:
-    webClientId,
+  webClientId: webClientId,
 });
 
 export default function Home({route, navigation}) {
@@ -50,15 +50,26 @@ export default function Home({route, navigation}) {
 
   return (
     <>
-      <Text>Home Pasien</Text>
-      <Text>Welcome, {user.nama}</Text>
-      <TouchableOpacity>
-        <Button
-          onPress={() => navigation.navigate('Periksa', {dataUser: user})}
-          title="Periksa"
-        />
-        <Button onPress={signOut} title="Sign Out" />
-      </TouchableOpacity>
+      <ThemeProvider>
+        <Text h2>Welcome, {user.nama}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Periksa', {dataUser: user})}>
+          <Card>
+            <Card.Title>HELLO WORLD</Card.Title>
+            <Text style={{marginBottom: 10}}>
+              The idea with React Native Elements is more about component
+              structure than actual design.
+            </Text>
+          </Card>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Button
+            onPress={() => navigation.navigate('Periksa', {dataUser: user})}
+            title="Periksa"
+          />
+          <Button onPress={signOut} title="Sign Out" />
+        </TouchableOpacity>
+      </ThemeProvider>
     </>
   );
 }

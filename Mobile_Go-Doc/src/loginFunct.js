@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Image} from 'react-native';
+import {Button, Text, Card, ThemeProvider} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import {
   GoogleSignin,
@@ -7,10 +8,12 @@ import {
   statusCodes,
 } from '@react-native-community/google-signin';
 import firestore from '@react-native-firebase/firestore';
-import Art from '../resource/art1.svg';
+import GodocLogo from '../resource/GodocLogo.png';
 
 import {loadUser, saveUser, clearUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
+
+const GodocArt = require('../resource/GodocArt.png');
 
 export default function LoginFunct({navigation}) {
   // const [loggedIn, setloggedIn] = useState(false);
@@ -81,14 +84,15 @@ export default function LoginFunct({navigation}) {
         );
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
     // if (user) setloggedIn(true);
   }
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: '1015789846201-ouivu783us3flbfc9rpiplf6ot0mi2oq.apps.googleusercontent.com',
+      webClientId:
+        '1015789846201-ouivu783us3flbfc9rpiplf6ot0mi2oq.apps.googleusercontent.com',
     });
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -97,20 +101,29 @@ export default function LoginFunct({navigation}) {
   return (
     <>
       <View>
-        <View style={{justifyContent: 'center', alignContent: 'center'}}>
-          <View>
-            <Art />
+        <View
+          style={{
+            justifyContent: 'center',
+            marginTop: 100,
+            alignItems: 'center',
+          }}>
+          <View style={{height: 270}}>
+            <Image
+              source={GodocArt}
+              style={{width: 295, height:220}}
+              // resizeMode="center"
+            />
           </View>
-          <GoogleSigninButton
-            style={{width: 250, height: 48}}
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.White}
-            onPress={_signIn}
-          />
+          <View>
+            <GoogleSigninButton
+              style={{width: 250, height: 48, alignSelf: 'center'}}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.White}
+              onPress={_signIn}
+            />
+          </View>
         </View>
-        <View>
-          {!user && <Text>You are currently logged out</Text>}
-        </View>
+        {/* <View>{!user && <Text>You are currently logged out</Text>}</View> */}
       </View>
     </>
   );

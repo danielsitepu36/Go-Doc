@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 
-import Logo from '../resource/logo.svg';
+import GodocLogo from '../resource/GodocLogo.png';
 
 export default function SplashScreen({navigation}) {
   return (
     <>
       <View style={styles.logo}>
-        <Logo />
+        <Image source={GodocLogo} style={{width:"70%"}}/>
       </View>
     </>
   );
