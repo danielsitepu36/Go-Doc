@@ -9,31 +9,66 @@ import SplashScreen from '../splashScreen';
 import ListPeriksaAktif from '../listPeriksaAktif';
 import BuatReservasi from '../buatReservasi';
 import JadwalPraktikDokter from '../jadwalPraktikDokter';
+import {StyleSheet} from 'react-native';
 
 const Stack = createStackNavigator();
 
 const dasar = (
   <>
-    <Stack.Screen name="Home" component={Home} options={{title: 'Home'}} />
+    <Stack.Screen
+      name="Home"
+      component={Home}
+      options={{
+        title: 'Home',
+        headerStyle: {
+          backgroundColor: '#e00000',
+        },
+        headerTintColor: '#fff',
+      }}
+    />
     <Stack.Screen
       name="Periksa"
       component={Periksa}
-      options={{title: 'Periksa'}}
+      options={{
+        title: 'Periksa',
+        headerStyle: {
+          backgroundColor: '#e00000',
+        },
+        headerTintColor: '#fff',
+      }}
     />
     <Stack.Screen
       name="BuatReservasi"
       component={BuatReservasi}
-      options={{title: 'Periksa'}}
+      options={{
+        title: 'Periksa',
+        headerStyle: {
+          backgroundColor: '#e00000',
+        },
+        headerTintColor: '#fff',
+      }}
     />
     <Stack.Screen
       name="ListPeriksaAktif"
       component={ListPeriksaAktif}
-      options={{title: 'Periksa'}}
+      options={{
+        title: 'Periksa',
+        headerStyle: {
+          backgroundColor: '#e00000',
+        },
+        headerTintColor: '#fff',
+      }}
     />
     <Stack.Screen
       name="JadwalPraktikDokter"
       component={JadwalPraktikDokter}
-      options={{title: 'Periksa'}}
+      options={{
+        title: 'Periksa',
+        headerStyle: {
+          backgroundColor: '#e00000',
+        },
+        headerTintColor: '#fff',
+      }}
     />
   </>
 );
@@ -47,6 +82,10 @@ export function LoginRouter() {
           component={LoginFunct}
           options={{
             title: 'Sign In',
+            headerStyle: {
+              backgroundColor: '#e00000',
+            },
+            headerTintColor: '#fff',
           }}
         />
         {dasar}
@@ -65,6 +104,10 @@ export function HomeRouter() {
           component={LoginFunct}
           options={{
             title: 'Sign In',
+            headerStyle: {
+              backgroundColor: '#e00000',
+            },
+            headerTintColor: '#fff',
           }}
         />
       </Stack.Navigator>
@@ -75,7 +118,7 @@ export function HomeRouter() {
 export function SplashScreenRouter() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
       </Stack.Navigator>
     </NavigationContainer>

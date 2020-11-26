@@ -1,11 +1,12 @@
 import React, {useEffect, useReducer, useState} from 'react';
-import {View, Text, Button, TouchableOpacity} from 'react-native';
+import {View, Text, Button, TouchableOpacity, Modal} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import {Card} from 'react-native-elements';
 
 export default function ListPeriksaAktif({route, navigation}) {
   const db = firestore();
   const {dataUser} = route.params;
-  const [userId, setUID] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -79,20 +80,42 @@ export default function ListPeriksaAktif({route, navigation}) {
   }, [state.userId]);
 
   return (
-    <View>
-      {console.log('uid:', state.userId)}
-      {console.log('data:', state.daftarPeriksa)}
-      <Text>List Periksa Aktif</Text>
-      <Text></Text>
-      {state.daftarPeriksa.map((item, key) => {
-        let date = new Date(item.waktuPeriksa);
-        console.log(date.toLocaleTimeString())
-        return (
-          <TouchableOpacity>
-            <Button title={date.toDateString({dateStyle: 'full'})} key={key} />
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+    <>
+      <View>
+        {console.log('uid:', state.userId)}
+        {console.log('data:', state.daftarPeriksa)}
+        <Text>List Periksa Aktif</Text>
+      </View>
+
+      <View>
+        <Modal animationType='slide'>
+          <View>
+            <Card>
+              <Card.Title>HELLO WORLD</Card.Title>
+              <Text style={{marginBottom: 10}}>
+                The idea with React Native Elements is more about component
+                structure than actual design.
+              </Text>
+            </Card>
+          </View>
+        </Modal>
+      </View>
+
+      <View>
+        <Text></Text>
+        {state.daftarPeriksa.map((item, key) => {
+          let date = new Date(item.waktuPeriksa);
+          console.log(date.toLocaleTimeString());
+          return (
+            <TouchableOpacity>
+              <Button
+                title={date.toDateString({dateStyle: 'full'})}
+                key={key}
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </>
   );
 }

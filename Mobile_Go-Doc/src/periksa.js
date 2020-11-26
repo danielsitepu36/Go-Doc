@@ -3,7 +3,7 @@ import {Text, View, Button, StyleSheet, TouchableOpacity} from 'react-native';
 
 export default function Periksa({route, navigation}) {
   const {dataUser} = route.params;
-  console.log('passedUser:', dataUser)
+  console.log('passedUser:', dataUser);
 
   // let user;
   // if (dataUser) {
@@ -13,10 +13,20 @@ export default function Periksa({route, navigation}) {
 
   return (
     <View>
-        <Text>Halo {namaPanggilan}, mau periksa apa hari ini?</Text>
+      <Text>Halo {namaPanggilan}, mau periksa apa hari ini?</Text>
       <TouchableOpacity>
-        <Button title="Lihat Daftar Periksa" onPress={() => navigation.navigate('ListPeriksaAktif', {dataUser: dataUser})}/>
-        <Button title="Buat Reservasi" onPress={() => navigation.navigate('BuatReservasi', {dataUser: dataUser})}/>
+        <Button
+          title="Lihat Daftar Periksa"
+          onPress={() =>
+            navigation.navigate('ListPeriksaAktif', {dataUser: dataUser})
+          }
+        />
+        <Button
+          title="Buat Reservasi"
+          onPress={() =>
+            navigation.navigate('BuatReservasi', {dataUser: dataUser})
+          }
+        />
       </TouchableOpacity>
     </View>
   );
