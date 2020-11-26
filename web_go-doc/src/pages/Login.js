@@ -12,6 +12,7 @@ class Login extends Component {
         <HomeNavbar />
         <Grid container style={{ padding: "100px" }}>
           <Grid
+            item
             lg={6}
             md={12}
             sm={12}

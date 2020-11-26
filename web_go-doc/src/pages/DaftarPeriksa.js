@@ -13,7 +13,7 @@ class DaftarPeriksa extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props.dokter);
+    // console.log(this.props.dokter);
     await db
       .collection("periksa")
       .where("idDokter", "==", `${this.props.uid}`)
@@ -22,7 +22,7 @@ class DaftarPeriksa extends Component {
         // console.log(data);
         let listPeriksa = [];
         data.forEach(async (doc) => {
-          console.log(this.props.filterPeriksa);
+          // console.log(this.props.filterPeriksa);
           listPeriksa.push({ ...doc.data(), id: doc.id });
         });
         this.setState({ periksa: listPeriksa });
@@ -36,11 +36,17 @@ class DaftarPeriksa extends Component {
     return (
       <>
         <div style={{ textAlign: "center", marginLeft: "275px" }}>
-          {console.log(this.props.dokter)}
+          {/* {console.log(this.props.dokter)} */}
           <Typography variant="h5" style={{ marginTop: "50px" }}>
             {this.props.filterJudul}
           </Typography>
-          {periksa}
+          {periksa.length > 0 ? (
+            periksa
+          ) : (
+            <Typography style={{ marginTop: "30px" }}>
+              Tidak ada data pasien
+            </Typography>
+          )}
         </div>
       </>
     );
