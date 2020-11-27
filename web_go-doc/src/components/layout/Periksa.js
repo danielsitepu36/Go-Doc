@@ -99,7 +99,7 @@ class Periksa extends Component {
           <form style={{ textAlign: "center" }} onSubmit={this.buatRekamMedis}>
             <Typography variant="h5">Buat Rekam Medis</Typography>
             <TextField
-              style={{ margin: "20px 0" }}
+              style={{ margin: "20px auto" }}
               id="dataPenyakit"
               multiline
               required
@@ -146,7 +146,7 @@ class Periksa extends Component {
               style={{
                 backgroundColor: "#e00000",
                 color: "#fff",
-                marginTop: "10px",
+                marginTop: "20px",
                 padding: "8px 15px",
               }}
             >
@@ -207,7 +207,7 @@ class Periksa extends Component {
     );
 
     const dataBody = (
-      <Card style={{ margin: "200px auto", maxWidth: "600px" }}>
+      <Card style={{ margin: "100px auto", maxWidth: "600px" }}>
         <CardContent style={{ textAlign: "center" }}>
           <Typography variant="h5">Data Diri Pasien</Typography>
           <TextField
@@ -226,12 +226,38 @@ class Periksa extends Component {
           <TextField
             style={{ margin: "20px 0" }}
             variant="outlined"
+            id="tanggalLahir"
+            name="tanggalLahir"
+            type="text"
+            label="Tanggal Lahir"
+            fullWidth
+            defaultValue={dayjs(pasien.tanggalLahir).format("DD MMMM YYYY")}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            style={{ margin: "20px 0" }}
+            variant="outlined"
             id="noTelp"
             name="noTelp"
             type="text"
             label="Nomor Telepon"
             fullWidth
             defaultValue={pasien.noTelp}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            style={{ margin: "20px 0" }}
+            variant="outlined"
+            id="alamat"
+            name="alamat"
+            type="text"
+            label="Alamat"
+            fullWidth
+            defaultValue={pasien.alamat}
             InputProps={{
               readOnly: true,
             }}

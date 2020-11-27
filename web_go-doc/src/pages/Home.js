@@ -13,7 +13,7 @@ class Home extends Component {
     return (
       <>
         <HomeNavbar />
-        <Grid container style={{ paddingTop: "100px" }}>
+        <Grid container style={{ padding: "100px 100px" }}>
           <Grid
             item
             lg={6}
@@ -33,7 +33,10 @@ class Home extends Component {
             lg={6}
             md={12}
             sm={12}
-            style={{ textAlign: "center", margin: "auto" }}
+            style={{
+              textAlign: "center",
+              margin: "auto",
+            }}
           >
             <Typography
               variant="h4"
@@ -52,6 +55,10 @@ class Home extends Component {
                 }}
               />
             </Typography>
+            <Typography variant="body1">
+              Go-Doc adalah aplikasi berbasis web dan mobile untuk menghubungkan
+              pasien dan dokter secara online
+            </Typography>
             <Button
               style={{
                 backgroundColor: "#e00000",
@@ -63,7 +70,7 @@ class Home extends Component {
               component={Link}
               to="/dashboard"
             >
-              <Typography variant="h6">Mulai Periksa</Typography>
+              <Typography variant="h6">Mulai Sekarang</Typography>
             </Button>
           </Grid>
         </Grid>

@@ -24,6 +24,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import GroupAdd from "@material-ui/icons/GroupAdd";
 import People from "@material-ui/icons/People";
 import Folder from "@material-ui/icons/Folder";
+import Profile from "@material-ui/icons/AccountBox";
+
 import RekamMedis from "./RekamMedis";
 
 class Dashboard extends Component {
@@ -117,16 +119,23 @@ class Dashboard extends Component {
               ))}
             </List>
             <Divider />
-            <ListItem
-              button
-              onClick={() => this.setState({ rekamMedis: true })}
-            >
-              <ListItemIcon>
-                {/* {console.log(this.state.rekamMedis)} */}
-                <Folder />
-              </ListItemIcon>
-              <ListItemText primary={"Cari Rekam Medis"} />
-            </ListItem>
+            <List>
+              <ListItem
+                button
+                onClick={() => this.setState({ rekamMedis: true })}
+              >
+                <ListItemIcon>
+                  <Folder />
+                </ListItemIcon>
+                <ListItemText primary={"Cari Rekam Medis"} />
+              </ListItem>
+              {/* <ListItem button>
+                <ListItemIcon>
+                  <Profile />
+                </ListItemIcon>
+                <ListItemText primary={"Pengaturan Profil"} />
+              </ListItem> */}
+            </List>
           </div>
         </Drawer>
         {/* {console.log(this.state.dokter)} */}

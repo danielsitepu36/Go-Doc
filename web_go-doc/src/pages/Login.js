@@ -41,26 +41,70 @@ class Login extends Component {
                 style={{
                   color: "#444444",
                   textAlign: "left",
+                  fontWeight: "bold",
                 }}
               >
                 Silakan masuk untuk melanjutkan
               </Typography>
-
-              <Button
+              <Typography
+                variant="body1"
+                align="center"
                 style={{
-                  backgroundColor: "#e00000",
-                  color: "#fff",
-                  margin: "10px 0 30px 0",
-                  padding: "8px 15px",
-                  borderRadius: "15px",
-                }}
-                onClick={async () => {
-                  const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-                  await firebase.auth().signInWithPopup(googleAuthProvider);
+                  color: "#444444",
+                  textAlign: "left",
                 }}
               >
-                <Typography variant="h6">Login Dengan Google</Typography>
-              </Button>
+                Aplikasi web ini ditujukan untuk dokter
+              </Typography>
+              <Typography
+                variant="body1"
+                align="center"
+                style={{
+                  color: "#444444",
+                  textAlign: "left",
+                }}
+              >
+                Apabila anda adalah pasien, silakan mendownload aplikasi mobile
+                kami
+              </Typography>
+              <div
+                style={{
+                  margin: "10px 0 30px 0",
+                }}
+              >
+                <Button
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    margin: "0 10px 10px 0",
+                    padding: "8px 15px",
+                    borderRadius: "15px",
+                  }}
+                  onClick={() =>
+                    window.open(
+                      "https://drive.google.com/drive/folders/1zvykYsIjW1EKWF2bp9Z_bN_Cw8xprzR4?usp=sharing",
+                      "_blank"
+                    )
+                  }
+                >
+                  <Typography variant="h6">Download Aplikasi</Typography>
+                </Button>
+                <Button
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    margin: "0 10px 10px 0",
+                    padding: "8px 15px",
+                    borderRadius: "15px",
+                  }}
+                  onClick={async () => {
+                    const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+                    await firebase.auth().signInWithPopup(googleAuthProvider);
+                  }}
+                >
+                  <Typography variant="h6">Login Sebagai Dokter</Typography>
+                </Button>
+              </div>
             </div>
           </Grid>
           <Grid
