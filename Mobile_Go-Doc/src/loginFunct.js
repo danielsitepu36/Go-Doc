@@ -61,7 +61,7 @@ export default function LoginFunct({navigation}) {
             nama: user.displayName,
             gmail: user.email,
             photoURL: user.photoURL,
-            umur: '',
+            tanggalLahir: '',
             alamat: '',
             noTelp: '',
           };
@@ -79,7 +79,7 @@ export default function LoginFunct({navigation}) {
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
-            routes: [{name: 'Home', params: {passedUser: data}}],
+            routes: [{name: 'Home', }],
           }),
         );
       })
@@ -104,11 +104,12 @@ export default function LoginFunct({navigation}) {
         <View
           style={{
             justifyContent: 'center',
-            marginTop: 100,
+            marginTop: 150,
             alignItems: 'center',
           }}>
           <View style={{height: 270}}>
             <Image
+              resizeMode='contain'
               source={GodocArt}
               style={{width: 295, height:220}}
               // resizeMode="center"
