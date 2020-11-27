@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Platform, Modal} from 'react-native';
+import {View, Platform, Modal, Keyboard} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {CommonActions} from '@react-navigation/native';
 import {Button, Text, Input, Card, Icon} from 'react-native-elements';
@@ -51,7 +51,7 @@ export default function JadwalPraktikDokter({route, navigation}) {
         idPasien: userId,
         keluhan: keluhanPasien,
         rekamMedis: {},
-        waktuPeriksa: new Date().toISOString(),
+        waktuPeriksa: tanggal.toISOString(),
       })
       .then(() => {
         // alert('Periksa berhasil dibuat');
@@ -89,11 +89,13 @@ export default function JadwalPraktikDokter({route, navigation}) {
 
   function pilihTanggal() {
     console.log('tanggal');
+    Keyboard.dismiss();
     showMode('date');
   }
 
   function pilihJam() {
     console.log('jam');
+    Keyboard.dismiss();
     showMode('time');
   }
 

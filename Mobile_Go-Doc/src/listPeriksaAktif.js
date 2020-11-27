@@ -145,11 +145,17 @@ export default function ListPeriksaAktif({route, navigation}) {
       <View>
         {console.log('uid:', state.userId)}
         {console.log('data:', state.daftarPeriksa)}
-        <Text style={{fontSize: 24, paddingLeft: 20, paddingTop: 10}}>
+        <Text
+          style={{
+            fontSize: 24,
+            paddingLeft: 20,
+            paddingTop: 10,
+            paddingBottom: 10,
+          }}>
           {state.title}
         </Text>
       </View>
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, maxHeight: '90%'}}>
         <FlatList
           data={state.daftarPeriksa}
           keyExtractor={(item) => item[1]}

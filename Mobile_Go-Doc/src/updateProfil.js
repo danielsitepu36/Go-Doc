@@ -1,5 +1,5 @@
 import React, {useReducer, useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Keyboard} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firestore from '@react-native-firebase/firestore';
 import {loadUser, saveUser} from './util/userStorage';
@@ -10,7 +10,6 @@ export default function UpdateProfil({navigation}) {
   const [user, setUser] = useState({});
   const [tempTanggalLahir, settmpTanggalLahir] = useState(new Date());
   const [showCal, setShowCal] = useState(false);
-  const [calChange, setCalChange] = useState(false);
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -40,15 +39,11 @@ export default function UpdateProfil({navigation}) {
       nama: user.nama,
       gmail: user.gmail,
       photoURL: user.photoURL,
-      tanggalLahir: user.tanggalLahir || user.umur,
+      tanggalLahir: user.tanggalLahir,
       alamat: user.alamat,
       noTelp: user.noTelp,
     },
   );
-
-  let touchedProps = {
-    style: calChange ? {color: 'black'} : {color: 'grey'},
-  };
 
   useEffect(() => {
     const fetchData = () => {
@@ -70,11 +65,11 @@ export default function UpdateProfil({navigation}) {
     settmpTanggalLahir(currentDate);
     let newDate = new Date(currentDate.toDateString()).toISOString();
     dispatch({type: 'ganti-tl', newTl: newDate});
-    setCalChange(true);
     setShowCal(false);
   }
 
   async function handleSubmit() {
+    if (state.nama == undefined) state.nama = user.nama;
     await firestore()
       .collection('pasien')
       .where('gmail', '==', user.gmail)
@@ -152,6 +147,7 @@ export default function UpdateProfil({navigation}) {
             containerStyle={{width: '30%', marginTop: 30, marginLeft: 20}}
             onPress={() => {
               setShowCal(true);
+              Keyboard.dismiss();
             }}
           />
         </View>

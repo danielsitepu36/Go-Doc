@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -15,7 +15,7 @@ import ListPeriksaAktif from '../listPeriksaAktif';
 import BuatReservasi from '../buatReservasi';
 import JadwalPraktikDokter from '../jadwalPraktikDokter';
 import UpdateProfil from '../updateProfil';
-import {Button} from 'react-native';
+import {BackHandler, Button, ToastAndroid} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
 GoogleSignin.configure({
@@ -77,7 +77,6 @@ const dasar = (
       component={Periksa}
       options={{
         title: 'Periksa',
-        headerRight: () => MyButton,
         ...opt,
       }}
     />
@@ -86,7 +85,6 @@ const dasar = (
       component={BuatReservasi}
       options={{
         title: 'Periksa',
-        headerRight: () => MyButton,
         ...opt,
       }}
     />
@@ -95,7 +93,6 @@ const dasar = (
       component={ListPeriksaAktif}
       options={{
         title: 'Periksa',
-        headerRight: () => MyButton,
         ...opt,
       }}
     />
@@ -104,7 +101,6 @@ const dasar = (
       component={JadwalPraktikDokter}
       options={{
         title: 'Periksa',
-        headerRight: () => MyButton,
         ...opt,
       }}
     />
@@ -113,55 +109,97 @@ const dasar = (
       component={UpdateProfil}
       options={{
         title: 'Update Profil',
-        headerRight: () => MyButton,
+        headerRight: () => MyButton(navigation),
         ...opt,
       }}
     />
   </>
 );
 
+const DoubleTapToExit = () => {
+  const message = 'Tap back again to exit';
+  const [exitApp, setExitApp] = useState(0);
+  const backAction = () => {
+    setTimeout(() => {
+      setExitApp(0);
+    }, 2000);
+
+    if (exitApp === 0) {
+      setExitApp(exitApp + 1);
+      ToastAndroid.show(message, ToastAndroid.SHORT);
+    } else if (exitApp === 1) {
+      BackHandler.exitApp();
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  });
+  return <></>;
+};
+
+const IsThisScreenInitial = (state) => {
+  const route = state.routes[state.index];
+  if (route.state) {
+    return IsThisScreenInitial(route.state);
+  }
+  return state.index === 0;
+};
+
 export function LoginRouter() {
+  const [initialScreen, setInitialScreen] = useState(true);
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="LoginFunct"
-          component={LoginFunct}
-          options={{
-            title: 'Sign In',
-            ...opt,
-            headerShown: false,
-          }}
-        />
-        {dasar}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      {initialScreen && <DoubleTapToExit />}
+      <NavigationContainer
+        onStateChange={(state) => {
+          setInitialScreen(IsThisScreenInitial(state));
+        }}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="LoginFunct"
+            component={LoginFunct}
+            options={{
+              title: 'Sign In',
+              ...opt,
+              headerShown: false,
+            }}
+          />
+          {dasar}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
 
 export function HomeRouter() {
+  const [initialScreen, setInitialScreen] = useState(true);
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {dasar}
-        <Stack.Screen
-          name="LoginFunct"
-          component={LoginFunct}
-          options={{
-            title: 'Sign In',
-            headerRight: () => (
-              <Button
-                onPress={() => alert('This is a button!')}
-                title="Info"
-                color="#fff"
-              />
-            ),
-            ...opt,
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      {initialScreen && <DoubleTapToExit />}
+      <NavigationContainer
+        onStateChange={(state) => {
+          setInitialScreen(IsThisScreenInitial(state));
+        }}>
+        <Stack.Navigator>
+          {dasar}
+          <Stack.Screen
+            name="LoginFunct"
+            component={LoginFunct}
+            options={{
+              title: 'Sign In',
+              ...opt,
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
 
