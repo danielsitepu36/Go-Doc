@@ -1,5 +1,5 @@
-import React, {createRef} from 'react';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import {createStackNavigator} from '@react-navigation/stack';
 import {GoogleSignin} from '@react-native-community/google-signin';
@@ -15,7 +15,7 @@ import ListPeriksaAktif from '../listPeriksaAktif';
 import BuatReservasi from '../buatReservasi';
 import JadwalPraktikDokter from '../jadwalPraktikDokter';
 import UpdateProfil from '../updateProfil';
-import {StyleSheet, Button} from 'react-native';
+import {Button} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
 GoogleSignin.configure({
@@ -34,7 +34,6 @@ const opt = {
 const signOut = async (navigation) => {
   // navigation.navigate('LoginFunct')
   try {
-    // await GoogleSignin.revokeAccess();
     await GoogleSignin.signOut();
     auth()
       .signOut()
@@ -114,7 +113,7 @@ const dasar = (
       component={UpdateProfil}
       options={{
         title: 'Update Profil',
-        headerRight: () => MyButton ,
+        headerRight: () => MyButton,
         ...opt,
       }}
     />

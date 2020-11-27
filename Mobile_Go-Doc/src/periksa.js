@@ -1,12 +1,10 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {Button, Text, Card, ThemeProvider, Icon} from 'react-native-elements';
+import React from 'react';
+import {View, TouchableOpacity} from 'react-native';
+import {Card, ThemeProvider, Icon} from 'react-native-elements';
 
 export default function Periksa({route, navigation}) {
   const {dataUser} = route.params;
   console.log('passedUser:', dataUser);
-
-  let namaPanggilan = dataUser.nama.split(' ')[0];
 
   return (
     <ThemeProvider>
@@ -36,7 +34,10 @@ export default function Periksa({route, navigation}) {
         <TouchableOpacity
           style={{width: '100%'}}
           onPress={() =>
-            navigation.navigate('ListPeriksaAktif', {dataUser: dataUser, diterima: false})
+            navigation.navigate('ListPeriksaAktif', {
+              dataUser: dataUser,
+              diterima: false,
+            })
           }>
           <Card>
             <Icon

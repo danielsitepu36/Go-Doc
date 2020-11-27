@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {View, Image} from 'react-native';
-import {Button, Text, Card, ThemeProvider} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import {
   GoogleSignin,
@@ -8,15 +7,13 @@ import {
   statusCodes,
 } from '@react-native-community/google-signin';
 import firestore from '@react-native-firebase/firestore';
-import GodocLogo from '../resource/GodocLogo.png';
 
-import {loadUser, saveUser, clearUser} from './util/userStorage';
+import {saveUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
 
 const GodocArt = require('../resource/GodocArt.png');
 
 export default function LoginFunct({navigation}) {
-  // const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState({});
 
   const _signIn = async () => {
@@ -79,7 +76,7 @@ export default function LoginFunct({navigation}) {
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
-            routes: [{name: 'Home', }],
+            routes: [{name: 'Home'}],
           }),
         );
       })
@@ -109,10 +106,9 @@ export default function LoginFunct({navigation}) {
           }}>
           <View style={{height: 270}}>
             <Image
-              resizeMode='contain'
+              resizeMode="contain"
               source={GodocArt}
-              style={{width: 295, height:220}}
-              // resizeMode="center"
+              style={{width: 295, height: 220}}
             />
           </View>
           <View>
@@ -124,7 +120,6 @@ export default function LoginFunct({navigation}) {
             />
           </View>
         </View>
-        {/* <View>{!user && <Text>You are currently logged out</Text>}</View> */}
       </View>
     </>
   );

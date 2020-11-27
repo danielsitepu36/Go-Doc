@@ -1,13 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
-import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {webClientId} from './util/config';
-import {loadUser, clearUser} from './util/userStorage';
+import {loadUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
-import {Button, Text, Card, ThemeProvider, Icon} from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/MaterialIcons'
-import UpdateProfil from './updateProfil';
+import {Text, Card, ThemeProvider, Icon} from 'react-native-elements';
 
 const GodocArt = require('../resource/GodocArt.png');
 
@@ -32,28 +29,7 @@ export default function Home({route, navigation}) {
     fetchData();
   }, []);
 
-  // const signOut = async () => {
-  //   try {
-  //     // await GoogleSignin.revokeAccess();
-  //     await GoogleSignin.signOut();
-  //     auth()
-  //       .signOut()
-  //       .then(() => alert('Your are signed out!'));
-  //     setUser({});
-  //     clearUser();
-  //     navigation.dispatch(
-  //       CommonActions.reset({
-  //         index: 1,
-  //         routes: [{name: 'LoginFunct'}],
-  //       }),
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  if (user.tanggalLahir === '' || user.umur === '') {
-    // return <UpdateProfil />;
+  if (user.tanggalLahir === '') {
     navigation.dispatch(
       CommonActions.reset({
         index: 1,
@@ -109,7 +85,10 @@ export default function Home({route, navigation}) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('ListPeriksaAktif', {dataUser: user, diterima: true})
+              navigation.navigate('ListPeriksaAktif', {
+                dataUser: user,
+                diterima: true,
+              })
             }
             style={{width: '50%'}}>
             <Card>
