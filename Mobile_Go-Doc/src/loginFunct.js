@@ -109,6 +109,7 @@ export default function LoginFunct({navigation}) {
           }}>
           <View style={{height: 270}}>
             <Image
+              resizeMode='contain'
               source={GodocArt}
               style={{width: 295, height:220}}
               // resizeMode="center"

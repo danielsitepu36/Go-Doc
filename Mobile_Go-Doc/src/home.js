@@ -1,12 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Image, TouchableOpacity, View} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {webClientId} from './util/config';
 import {loadUser, clearUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
-import {Button, Text, Card, ThemeProvider} from 'react-native-elements';
+import {Button, Text, Card, ThemeProvider, Icon} from 'react-native-elements';
+// import Icon from 'react-native-vector-icons/MaterialIcons'
 import UpdateProfil from './updateProfil';
+
+const GodocArt = require('../resource/GodocArt.png');
 
 GoogleSignin.configure({
   webClientId: webClientId,
@@ -29,25 +32,25 @@ export default function Home({route, navigation}) {
     fetchData();
   }, []);
 
-  const signOut = async () => {
-    try {
-      // await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-      auth()
-        .signOut()
-        .then(() => alert('Your are signed out!'));
-      setUser({});
-      clearUser();
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{name: 'LoginFunct'}],
-        }),
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const signOut = async () => {
+  //   try {
+  //     // await GoogleSignin.revokeAccess();
+  //     await GoogleSignin.signOut();
+  //     auth()
+  //       .signOut()
+  //       .then(() => alert('Your are signed out!'));
+  //     setUser({});
+  //     clearUser();
+  //     navigation.dispatch(
+  //       CommonActions.reset({
+  //         index: 1,
+  //         routes: [{name: 'LoginFunct'}],
+  //       }),
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   if (user.tanggalLahir === '' || user.umur === '') {
     // return <UpdateProfil />;
@@ -62,24 +65,64 @@ export default function Home({route, navigation}) {
   return (
     <>
       <ThemeProvider>
-        <Text h2>Welcome, {user.nama}</Text>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('Periksa', {dataUser: user})}>
-            <Card>
-              <Card.Title>HELLO WORLD</Card.Title>
-              <Text style={{marginBottom: 10}}>
-                The idea with React Native Elements is more about component
-                structure than actual design.
+        <View style={{marginLeft: 10, marginRight: 10}}>
+          <Card>
+            <Card.Title style={{textAlign: 'left'}}>
+              <Text h4 h4Style={{fontSize: 18}}>
+                Selamat datang, {user.nama}
               </Text>
-            </Card>
-          </TouchableOpacity> */}
-
-        <TouchableOpacity>
-          <Button
-            onPress={() => navigation.navigate('Periksa', {dataUser: user})}
-            title="Periksa"
-          />
-          <Button onPress={signOut} title="Sign Out" />
+            </Card.Title>
+            <Card.Divider />
+            <Text>Jadwal minum obat selanjutnya: -</Text>
+          </Card>
+        </View>
+        <TouchableOpacity
+          style={{marginLeft: 10, marginRight: 10}}
+          onPress={() => navigation.navigate('Periksa', {dataUser: user})}>
+          <Card>
+            <Image
+              source={GodocArt}
+              resizeMode="contain"
+              style={{alignSelf: 'center', width: 300, height: 200}}
+            />
+            <Card.Title style={{marginTop: 20}}>PERIKSA</Card.Title>
+          </Card>
         </TouchableOpacity>
+        <View
+          style={{
+            marginLeft: 10,
+            marginRight: 10,
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity style={{width: '50%'}}>
+            <Card>
+              <Icon
+                size={40}
+                type="material-community"
+                color="#e00000"
+                name="pill"
+              />
+              <Card.Title style={{marginTop: 20}}>REMINDER OBAT</Card.Title>
+            </Card>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ListPeriksaAktif', {dataUser: user, diterima: true})
+            }
+            style={{width: '50%'}}>
+            <Card>
+              <Icon
+                size={40}
+                type="material"
+                color="#e00000"
+                name="folder-shared"
+              />
+              <Card.Title style={{marginTop: 20}}>RIWAYAT</Card.Title>
+            </Card>
+          </TouchableOpacity>
+        </View>
       </ThemeProvider>
     </>
   );

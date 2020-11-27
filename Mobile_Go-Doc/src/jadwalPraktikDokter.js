@@ -1,12 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Button, Platform, TextInput, Modal} from 'react-native';
+import {View, Image, Platform, TextInput, Modal} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {CommonActions} from '@react-navigation/native';
+import {
+  Button,
+  Text,
+  Input,
+  Card,
+  ThemeProvider,
+  Icon,
+} from 'react-native-elements';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 // import {loadUser} from './util/userStorage';
 // import DatePicker from 'react-native-date-picker';
 
 export default function JadwalPraktikDokter({route, navigation}) {
-  // const [date, setDate] = useState(new Date());
+  const [tanggal, setTanggal] = useState(new Date());
+  const tanggalMinimum = new Date();
+  tanggalMinimum.setDate(tanggalMinimum.getDate() + 1);
+  const [showCal, setShowCal] = useState(false);
+  const [mode, setMode] = useState('date');
   const [userId, setUID] = useState('');
   const [keluhanPasien, SetKeluhan] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,13 +45,7 @@ export default function JadwalPraktikDokter({route, navigation}) {
       console.log('UID:', userId, '=> gmail: ', dataUser.gmail);
     };
     fetchData();
-  }, []);
-
-  // function pilihTanggal(date, days) {
-  //   let tanggal = new Date();
-  //   tanggal.setDate(tanggal.getDate() + days);
-  //   return tanggal;
-  // }
+  }, [dataUser]);
 
   async function buatPeriksa() {
     console.log('keluhan: ', keluhanPasien);
@@ -75,38 +83,97 @@ export default function JadwalPraktikDokter({route, navigation}) {
     );
   }
 
+  function gantiTanggal(event, date) {
+    console.log('gantiTanggal');
+    const tanggalPilihan = date || tanggal;
+    setShowCal(Platform.OS === 'ios');
+    setTanggal(tanggalPilihan);
+    setShowCal(false);
+  }
+
+  function showMode(modePilihan) {
+    console.log('log');
+    setShowCal(true);
+    setMode(modePilihan);
+  }
+
+  function pilihTanggal() {
+    console.log('tanggal');
+    showMode('date');
+  }
+
+  function pilihJam() {
+    console.log('jam');
+    showMode('time');
+  }
+
   return (
     <View>
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        onRequestClose={() => handleModal()}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'grey',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              width: '80%',
-              backgroundColor: '#fff',
-              borderRadius: 10,
-              height: 300,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 200,
-              padding: 20,
-            }}>
-            <Text style={{flex: 1, height: 20, margin: 50, textAlignVertical: 'center'}}>Periksa berhasil dibuat!</Text>
-            <View style={{backgroundColor: 'grey', height: 1, width: '100%'}}></View>
-            <View style={{flex: 1}}></View>
-            <Button title="Kembali ke Home" onPress={() => handleModal()} />
-          </View>
+      <Card>
+        <Card.Title h4 style={{marginBottom: 40}}>
+          Buat Data Periksa
+        </Card.Title>
+        <Input
+          label="Keluhan"
+          placeholder="Masukkan keluhan"
+          onChangeText={SetKeluhan}
+        />
+        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          <Input
+            label="Jam Periksa"
+            placeholder="Jam Periksa"
+            value={tanggal.toLocaleTimeString('short')}
+            editable={false}
+            containerStyle={{width: 220}}
+          />
+
+          <Button
+            title="UBAH"
+            buttonStyle={{backgroundColor: '#e00000'}}
+            containerStyle={{width: 80, marginTop: 30, marginLeft: 20}}
+            onPress={() => {
+              pilihJam();
+            }}
+          />
         </View>
-      </Modal>
-      <Text style={{fontSize: 28, fontWeight: 'bold', alignSelf: 'center'}}>
-        Jadwal Praktik
+        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          <Input
+            label="Tanggal Periksa"
+            placeholder="Tanggal Periksa"
+            value={tanggal.toDateString()}
+            editable={false}
+            containerStyle={{width: 220}}
+          />
+
+          <Button
+            title="UBAH"
+            buttonStyle={{backgroundColor: '#e00000'}}
+            containerStyle={{width: 80, marginTop: 30, marginLeft: 20}}
+            onPress={() => {
+              pilihTanggal();
+            }}
+          />
+        </View>
+        {showCal && (
+          <DateTimePicker
+            minimumDate={tanggalMinimum}
+            mode={mode}
+            value={tanggal}
+            onChange={gantiTanggal}
+            onTouchCancel={() => setShowCal(false)}
+            // onTouchOk={() => setShowCal(false)}
+          />
+        )}
+        <Button
+          title="SUBMIT"
+          onPress={() => {
+            buatPeriksa();
+          }}
+          buttonStyle={{backgroundColor: '#e00000'}}
+        />
+      </Card>
+      {/* <Text style={{fontSize: 28, fontWeight: 'bold', alignSelf: 'center'}}>
+        Buat Periksa
       </Text>
       <Text
         style={{
@@ -125,7 +192,71 @@ export default function JadwalPraktikDokter({route, navigation}) {
             buatPeriksa();
           }}
         />
-      </View>
+      </View> */}
+
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="fade"
+        onRequestClose={() => handleModal()}>
+        <View
+          style={{
+            paddingTop: 150,
+            flex: 1,
+            backgroundColor: 'rgba(100,100,100, 0.5)',
+            alignItems: 'center',
+          }}>
+          <Card>
+            <View
+              style={{
+                padding: 20,
+              }}>
+              <Icon
+                size={150}
+                type="material"
+                color="#00BB4E"
+                name="check-circle-outline"
+              />
+              <Text h4 h4Style={{alignSelf: 'center', marginTop: 10}}>
+                Periksa Berhasil dibuat
+              </Text>
+              <Button
+                buttonStyle={{backgroundColor: '#e00000', marginTop: 50}}
+                title="KEMBALI"
+                onPress={() => handleModal()}
+              />
+            </View>
+          </Card>
+          {/* <View
+            style={{
+              width: '80%',
+              backgroundColor: '#fff',
+              borderRadius: 10,
+              height: 300,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 200,
+              padding: 20,
+            }}>
+            <Text
+              style={{
+                flex: 1,
+                height: 20,
+                margin: 50,
+                textAlignVertical: 'center',
+              }}>
+              Periksa berhasil dibuat!
+            </Text>
+            <View
+              style={{
+                backgroundColor: 'grey',
+                height: 1,
+                width: '100%',
+              }}></View>
+            <View style={{flex: 1}}></View>
+          </View> */}
+        </View>
+      </Modal>
     </View>
   );
 }

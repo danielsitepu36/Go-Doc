@@ -2,7 +2,6 @@ import React, {useReducer, useState, useEffect} from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firestore from '@react-native-firebase/firestore';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {loadUser, saveUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
 import {Text, Input, Button, Card} from 'react-native-elements';
@@ -67,7 +66,7 @@ export default function UpdateProfil({navigation}) {
 
   function onChange(event, selectedDate) {
     const currentDate = selectedDate || tempTanggalLahir;
-    // setShow(Platform.OS === 'android');
+    setShow(Platform.OS === 'ios');
     settmpTanggalLahir(currentDate);
     let newDate = new Date(currentDate.toDateString()).toISOString();
     dispatch({type: 'ganti-tl', newTl: newDate});
@@ -158,7 +157,7 @@ export default function UpdateProfil({navigation}) {
           />
 
           <Button
-            title="Ubah"
+            title="UBAH"
             buttonStyle={{backgroundColor: '#e00000'}}
             containerStyle={{width: 80, marginTop: 30, marginLeft: 20}}
             onPress={() => {
@@ -191,7 +190,7 @@ export default function UpdateProfil({navigation}) {
           }}
         />
         <Button
-          title="Submit"
+          title="SUBMIT"
           buttonStyle={{backgroundColor: '#e00000'}}
           onPress={() => handleSubmit()}
         />

@@ -51,7 +51,7 @@ const signOut = async (navigation) => {
   }
 };
 
-const MyButton = (
+const MyButton = (navigation) => (
   <Button
     onPress={() => {
       signOut(navigation);
@@ -69,7 +69,7 @@ const dasar = (
       component={Home}
       options={({navigation, route}) => ({
         title: 'Home',
-        headerRight: () => MyButton,
+        headerRight: () => MyButton(navigation),
         ...opt,
       })}
     />

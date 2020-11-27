@@ -7,7 +7,11 @@ export default function SplashScreen({navigation}) {
   return (
     <>
       <View style={styles.logo}>
-        <Image source={GodocLogo} style={{width:"70%",}}/>
+        <Image
+          source={GodocLogo}
+          resizeMode="contain"
+          style={{width: '70%', height: '70%'}}
+        />
       </View>
     </>
   );

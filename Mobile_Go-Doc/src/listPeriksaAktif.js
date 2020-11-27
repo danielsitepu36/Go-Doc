@@ -1,18 +1,11 @@
 import React, {useEffect, useReducer, useState} from 'react';
-import {
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  Modal,
-  FlatList,
-} from 'react-native';
+import {View, TouchableOpacity, Modal, FlatList} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {Card} from 'react-native-elements';
+import {Button, Text, Card, ThemeProvider, Icon} from 'react-native-elements';
 
 export default function ListPeriksaAktif({route, navigation}) {
   const db = firestore();
-  const {dataUser} = route.params;
+  const {dataUser, diterima} = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [state, dispatch] = useReducer(
     (prevState, action) => {
@@ -27,11 +20,23 @@ export default function ListPeriksaAktif({route, navigation}) {
             ...prevState,
             userId: action.UID,
           };
+        case 'FETCH_DOKTER':
+          return {
+            ...prevState,
+            dokter: action.listDokter,
+          };
+        case 'SET_TITLE':
+          return {
+            ...prevState,
+            title: action.title,
+          };
       }
     },
     {
       daftarPeriksa: [],
+      dokter: [],
       userId: '',
+      title: '',
     },
   );
 
@@ -62,52 +67,89 @@ export default function ListPeriksaAktif({route, navigation}) {
 
   useEffect(() => {
     let isSubscribed = true;
-    async function fetchPeriksa() {
-      let listPeriksa = [];
+    async function fetchDokter() {
+      let listDokter = [];
       try {
         await db
-          .collection('periksa')
-          .where('idPasien', '==', state.userId)
+          .collection('dokter')
           .get()
           .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              console.log('doc.data', doc.data());
-              listPeriksa.push([doc.data(), doc.id]);
+            querySnapshot.forEach((item) => {
+              listDokter.push([item.data(), item.id]);
             });
-            dispatch({type: 'FETCH_PERIKSA', periksa: listPeriksa});
+            dispatch({type: 'FETCH_DOKTER', listDokter: listDokter})
           });
       } catch (e) {
         console.error(e);
       }
     }
-    fetchPeriksa();
+    fetchDokter();
+    return () => (isSubscribed = false);
+  }, []);
+
+  useEffect(() => {
+    let isSubscribed = true;
+
+    if (diterima) {
+      dispatch({type: 'SET_TITLE', title: "Riwayat Periksa"});
+      async function fetchPeriksa() {
+        let listPeriksa = [];
+        try {
+          await db
+            .collection('periksa')
+            .where('idPasien', '==', state.userId)
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                console.log('doc.data', doc.data());
+                if (doc.data().diterima !== 'menunggu') {
+                  listPeriksa.push([doc.data(), doc.id]);
+                }
+              });
+              dispatch({type: 'FETCH_PERIKSA', periksa: listPeriksa});
+            });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      fetchPeriksa();
+    } else {
+      dispatch({type: 'SET_TITLE', title: "Daftar Reservasi Aktif"});
+      async function fetchPeriksa() {
+        let listPeriksa = [];
+        try {
+          await db
+            .collection('periksa')
+            .where('idPasien', '==', state.userId)
+            .where('diterima', '==', 'menunggu')
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                console.log('doc.data', doc.data());
+                listPeriksa.push([doc.data(), doc.id]);
+              });
+              dispatch({type: 'FETCH_PERIKSA', periksa: listPeriksa});
+            });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      fetchPeriksa();
+    }
     return () => {
       isSubscribed = false;
     };
   }, [state.userId]);
 
   return (
-    <View style={{flex:1}}>
-      <View style={{marginBottom: 20}}>
+    <View style={{flex: 1}}>
+      <View >
         {console.log('uid:', state.userId)}
         {console.log('data:', state.daftarPeriksa)}
-        <Text style={{fontSize: 24, paddingLeft: 20, paddingTop: 10}}>List Periksa Aktif</Text>
+        <Text style={{fontSize: 24, paddingLeft: 20, paddingTop: 10}}>
+          {state.title}
+        </Text>
       </View>
-
-      {/* <View>
-        <Modal animationType='slide'>
-          <View>
-            <Card>
-              <Card.Title>HELLO WORLD</Card.Title>
-              <Text style={{marginBottom: 10}}>
-                The idea with React Native Elements is more about component
-                structure than actual design.
-              </Text>
-            </Card>
-          </View>
-        </Modal>
-      </View> */}
-
       <View style={{flex: 1}}>
         <FlatList
           data={state.daftarPeriksa}
@@ -115,11 +157,24 @@ export default function ListPeriksaAktif({route, navigation}) {
           renderItem={({item}) => {
             let date = new Date(item[0].waktuPeriksa);
             console.log(date.toLocaleTimeString());
+            let dokter;
+            state.dokter.forEach((dok) => {
+              if (dok[1] === item[0].idDokter) {
+                dokter = dok[0]
+              }
+            })
             return (
               <TouchableOpacity>
-                <Button
-                  title={date.toDateString({dateStyle: 'full'})}
-                />
+                <Card >
+                  <View style={{padding:5}}>
+                    <Text h4 h4Style={{fontSize: 18}}>
+                      {new Date(item[0].waktuPeriksa).toLocaleString()}
+                    </Text>
+                    <Text>Dokter: {dokter.nama}</Text>
+                    <Text>Tempat: {dokter.tempatPraktek}</Text>
+                    <Text>Keluhan : {item[0].keluhan}</Text>
+                  </View>
+                </Card>
               </TouchableOpacity>
             );
           }}

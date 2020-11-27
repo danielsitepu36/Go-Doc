@@ -1,33 +1,57 @@
 import React, {useState} from 'react';
-import {Text, View, Button, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {Button, Text, Card, ThemeProvider, Icon} from 'react-native-elements';
 
 export default function Periksa({route, navigation}) {
   const {dataUser} = route.params;
   console.log('passedUser:', dataUser);
 
-  // let user;
-  // if (dataUser) {
-  //     user = dataUser;
-  // }
   let namaPanggilan = dataUser.nama.split(' ')[0];
 
   return (
-    <View>
-      <Text style={{fontSize: 18, margin: 5, marginBottom: 20}}>Halo {namaPanggilan}, mau apa hari ini?</Text>
-      <TouchableOpacity>
-        <Button
-          title="Lihat Daftar Periksa"
-          onPress={() =>
-            navigation.navigate('ListPeriksaAktif', {dataUser: dataUser})
-          }
-        />
-        <Button
-          title="Buat Reservasi"
+    <ThemeProvider>
+      <View
+        style={{
+          marginLeft: 10,
+          marginRight: 10,
+        }}>
+        <TouchableOpacity
+          style={{width: '100%'}}
           onPress={() =>
             navigation.navigate('BuatReservasi', {dataUser: dataUser})
-          }
-        />
-      </TouchableOpacity>
-    </View>
+          }>
+          <Card>
+            <Icon
+              iconStyle={{marginTop: 20, marginBottom: 20}}
+              size={120}
+              type="material"
+              color="#e00000"
+              name="create"
+            />
+            <Card.Title style={{marginTop: 20, fontSize: 20}}>
+              BUAT RESERVASI
+            </Card.Title>
+          </Card>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{width: '100%'}}
+          onPress={() =>
+            navigation.navigate('ListPeriksaAktif', {dataUser: dataUser, diterima: false})
+          }>
+          <Card>
+            <Icon
+              iconStyle={{marginTop: 20, marginBottom: 20}}
+              size={120}
+              type="material"
+              color="#e00000"
+              name="assignment-turned-in"
+            />
+            <Card.Title style={{marginTop: 20, fontSize: 20}}>
+              LIHAT RESERVASI AKTIF
+            </Card.Title>
+          </Card>
+        </TouchableOpacity>
+      </View>
+    </ThemeProvider>
   );
 }
