@@ -1,16 +1,15 @@
 import React, {useReducer, useState, useEffect} from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import {View, StyleSheet, Keyboard} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firestore from '@react-native-firebase/firestore';
 import {loadUser, saveUser} from './util/userStorage';
 import {CommonActions} from '@react-navigation/native';
-import {Text, Input, Button, Card} from 'react-native-elements';
+import {Input, Button, Card} from 'react-native-elements';
 
 export default function UpdateProfil({navigation}) {
   const [user, setUser] = useState({});
   const [tempTanggalLahir, settmpTanggalLahir] = useState(new Date());
   const [showCal, setShowCal] = useState(false);
-  const [calChange, setCalChange] = useState(false);
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -40,15 +39,11 @@ export default function UpdateProfil({navigation}) {
       nama: user.nama,
       gmail: user.gmail,
       photoURL: user.photoURL,
-      tanggalLahir: user.tanggalLahir || user.umur,
+      tanggalLahir: user.tanggalLahir,
       alamat: user.alamat,
       noTelp: user.noTelp,
     },
   );
-
-  let touchedProps = {
-    style: calChange ? {color: 'black'} : {color: 'grey'},
-  };
 
   useEffect(() => {
     const fetchData = () => {
@@ -66,15 +61,15 @@ export default function UpdateProfil({navigation}) {
 
   function onChange(event, selectedDate) {
     const currentDate = selectedDate || tempTanggalLahir;
-    setShow(Platform.OS === 'ios');
+    setShowCal(Platform.OS === 'ios');
     settmpTanggalLahir(currentDate);
     let newDate = new Date(currentDate.toDateString()).toISOString();
     dispatch({type: 'ganti-tl', newTl: newDate});
-    setCalChange(true);
     setShowCal(false);
   }
 
   async function handleSubmit() {
+    if (state.nama == undefined) state.nama = user.nama;
     await firestore()
       .collection('pasien')
       .where('gmail', '==', user.gmail)
@@ -122,8 +117,6 @@ export default function UpdateProfil({navigation}) {
   return (
     <View style={styles.form}>
       <Card>
-        {/* <Text>Nama Lengkap:</Text> */}
-        {/* {console.log(user.nama)} */}
         <Card.Title h4 style={{marginBottom: 40}}>
           Data Diri
         </Card.Title>
@@ -138,30 +131,23 @@ export default function UpdateProfil({navigation}) {
             })
           }
         />
-        {/* <Text>Tanggal lahir:</Text>
-        <View style={{margin: 10}}>
-          <TouchableOpacity
-            onPress={() => {
-              setShowCal(true);
-            }}>
-            <Text {...touchedProps}>{tempTanggalLahir.toDateString()}</Text>
-          </TouchableOpacity>
-        </View> */}
+
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           <Input
             label="Tanggal Lahir"
             placeholder="Tanggal Lahir"
             value={tempTanggalLahir.toDateString()}
             editable={false}
-            containerStyle={{width: 180}}
+            containerStyle={{width: '60%'}}
           />
 
           <Button
             title="UBAH"
             buttonStyle={{backgroundColor: '#e00000'}}
-            containerStyle={{width: 80, marginTop: 30, marginLeft: 20}}
+            containerStyle={{width: '30%', marginTop: 30, marginLeft: 20}}
             onPress={() => {
               setShowCal(true);
+              Keyboard.dismiss();
             }}
           />
         </View>

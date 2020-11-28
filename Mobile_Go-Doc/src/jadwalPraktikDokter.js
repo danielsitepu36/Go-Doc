@@ -1,19 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Image, Platform, TextInput, Modal} from 'react-native';
+import {View, Platform, Modal, Keyboard} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {CommonActions} from '@react-navigation/native';
-import {
-  Button,
-  Text,
-  Input,
-  Card,
-  ThemeProvider,
-  Icon,
-} from 'react-native-elements';
+import {Button, Text, Input, Card, Icon} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
-// import {loadUser} from './util/userStorage';
-// import DatePicker from 'react-native-date-picker';
 
 export default function JadwalPraktikDokter({route, navigation}) {
   const [tanggal, setTanggal] = useState(new Date());
@@ -61,7 +51,7 @@ export default function JadwalPraktikDokter({route, navigation}) {
         idPasien: userId,
         keluhan: keluhanPasien,
         rekamMedis: {},
-        waktuPeriksa: new Date().toISOString(),
+        waktuPeriksa: tanggal.toISOString(),
       })
       .then(() => {
         // alert('Periksa berhasil dibuat');
@@ -99,11 +89,13 @@ export default function JadwalPraktikDokter({route, navigation}) {
 
   function pilihTanggal() {
     console.log('tanggal');
+    Keyboard.dismiss();
     showMode('date');
   }
 
   function pilihJam() {
     console.log('jam');
+    Keyboard.dismiss();
     showMode('time');
   }
 
@@ -124,13 +116,13 @@ export default function JadwalPraktikDokter({route, navigation}) {
             placeholder="Jam Periksa"
             value={tanggal.toLocaleTimeString('short')}
             editable={false}
-            containerStyle={{width: 220}}
+            containerStyle={{width: '60%'}}
           />
 
           <Button
             title="UBAH"
             buttonStyle={{backgroundColor: '#e00000'}}
-            containerStyle={{width: 80, marginTop: 30, marginLeft: 20}}
+            containerStyle={{width: '30%', marginTop: 30, marginLeft: 20}}
             onPress={() => {
               pilihJam();
             }}
@@ -142,13 +134,13 @@ export default function JadwalPraktikDokter({route, navigation}) {
             placeholder="Tanggal Periksa"
             value={tanggal.toDateString()}
             editable={false}
-            containerStyle={{width: 220}}
+            containerStyle={{width: '60%'}}
           />
 
           <Button
             title="UBAH"
             buttonStyle={{backgroundColor: '#e00000'}}
-            containerStyle={{width: 80, marginTop: 30, marginLeft: 20}}
+            containerStyle={{width: '30%', marginTop: 30, marginLeft: 20}}
             onPress={() => {
               pilihTanggal();
             }}
@@ -172,27 +164,6 @@ export default function JadwalPraktikDokter({route, navigation}) {
           buttonStyle={{backgroundColor: '#e00000'}}
         />
       </Card>
-      {/* <Text style={{fontSize: 28, fontWeight: 'bold', alignSelf: 'center'}}>
-        Buat Periksa
-      </Text>
-      <Text
-        style={{
-          fontSize: 20,
-          fontWeight: 'bold',
-          alignSelf: 'center',
-          paddingBottom: 20,
-        }}>
-        dr. {dokter[0].nama}
-      </Text>
-      <View>
-        <TextInput placeholder="Masukkan keluhan" onChangeText={SetKeluhan} />
-        <Button
-          title="Buat Permintaan Periksa"
-          onPress={() => {
-            buatPeriksa();
-          }}
-        />
-      </View> */}
 
       <Modal
         transparent={true}
@@ -227,34 +198,6 @@ export default function JadwalPraktikDokter({route, navigation}) {
               />
             </View>
           </Card>
-          {/* <View
-            style={{
-              width: '80%',
-              backgroundColor: '#fff',
-              borderRadius: 10,
-              height: 300,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 200,
-              padding: 20,
-            }}>
-            <Text
-              style={{
-                flex: 1,
-                height: 20,
-                margin: 50,
-                textAlignVertical: 'center',
-              }}>
-              Periksa berhasil dibuat!
-            </Text>
-            <View
-              style={{
-                backgroundColor: 'grey',
-                height: 1,
-                width: '100%',
-              }}></View>
-            <View style={{flex: 1}}></View>
-          </View> */}
         </View>
       </Modal>
     </View>

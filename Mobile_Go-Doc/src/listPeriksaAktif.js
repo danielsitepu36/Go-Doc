@@ -1,12 +1,11 @@
 import React, {useEffect, useReducer, useState} from 'react';
-import {View, TouchableOpacity, Modal, FlatList} from 'react-native';
+import {View, TouchableOpacity, FlatList} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {Button, Text, Card, ThemeProvider, Icon} from 'react-native-elements';
+import {Text, Card} from 'react-native-elements';
 
 export default function ListPeriksaAktif({route, navigation}) {
   const db = firestore();
   const {dataUser, diterima} = route.params;
-  const [modalVisible, setModalVisible] = useState(false);
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -77,7 +76,7 @@ export default function ListPeriksaAktif({route, navigation}) {
             querySnapshot.forEach((item) => {
               listDokter.push([item.data(), item.id]);
             });
-            dispatch({type: 'FETCH_DOKTER', listDokter: listDokter})
+            dispatch({type: 'FETCH_DOKTER', listDokter: listDokter});
           });
       } catch (e) {
         console.error(e);
@@ -91,7 +90,7 @@ export default function ListPeriksaAktif({route, navigation}) {
     let isSubscribed = true;
 
     if (diterima) {
-      dispatch({type: 'SET_TITLE', title: "Riwayat Periksa"});
+      dispatch({type: 'SET_TITLE', title: 'Riwayat Periksa'});
       async function fetchPeriksa() {
         let listPeriksa = [];
         try {
@@ -114,7 +113,7 @@ export default function ListPeriksaAktif({route, navigation}) {
       }
       fetchPeriksa();
     } else {
-      dispatch({type: 'SET_TITLE', title: "Daftar Reservasi Aktif"});
+      dispatch({type: 'SET_TITLE', title: 'Daftar Reservasi Aktif'});
       async function fetchPeriksa() {
         let listPeriksa = [];
         try {
@@ -143,14 +142,20 @@ export default function ListPeriksaAktif({route, navigation}) {
 
   return (
     <View style={{flex: 1}}>
-      <View >
+      <View>
         {console.log('uid:', state.userId)}
         {console.log('data:', state.daftarPeriksa)}
-        <Text style={{fontSize: 24, paddingLeft: 20, paddingTop: 10}}>
+        <Text
+          style={{
+            fontSize: 24,
+            paddingLeft: 20,
+            paddingTop: 10,
+            paddingBottom: 10,
+          }}>
           {state.title}
         </Text>
       </View>
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, maxHeight: '90%'}}>
         <FlatList
           data={state.daftarPeriksa}
           keyExtractor={(item) => item[1]}
@@ -160,13 +165,13 @@ export default function ListPeriksaAktif({route, navigation}) {
             let dokter;
             state.dokter.forEach((dok) => {
               if (dok[1] === item[0].idDokter) {
-                dokter = dok[0]
+                dokter = dok[0];
               }
-            })
+            });
             return (
               <TouchableOpacity>
-                <Card >
-                  <View style={{padding:5}}>
+                <Card>
+                  <View style={{padding: 5}}>
                     <Text h4 h4Style={{fontSize: 18}}>
                       {new Date(item[0].waktuPeriksa).toLocaleString()}
                     </Text>
@@ -179,9 +184,6 @@ export default function ListPeriksaAktif({route, navigation}) {
             );
           }}
         />
-        {/* {state.daftarPeriksa.map((item, key) => {
-            
-          })} */}
       </View>
     </View>
   );
