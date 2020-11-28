@@ -13,6 +13,9 @@ class Periksa extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      daftarObat: [
+        { idPasien: this.props.periksa.idPasien, namaObat: "", jadwal: "" },
+      ],
       open: false,
       cek: false,
       buat: false,
@@ -27,6 +30,28 @@ class Periksa extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
+  };
+
+  handleChangeObat = (event) => {
+    console.log(event.target.id);
+    let daftarObat = [...this.state.daftarObat];
+    daftarObat[event.target.id][event.target.name] = event.target.value;
+    this.setState({ daftarObat });
+  };
+
+  addObat = (event) => {
+    this.setState((prevState) => ({
+      daftarObat: [
+        ...prevState.daftarObat,
+        { idPasien: this.props.periksa.idPasien, namaObat: "", jadwal: "" },
+      ],
+    }));
+    console.log(this.state.daftarObat);
+  };
+  removeObat = (event) => {
+    this.setState((prevState) => ({
+      daftarObat: [...prevState.daftarObat.slice(0, -1)],
+    }));
   };
 
   async componentDidMount() {
@@ -69,6 +94,14 @@ class Periksa extends Component {
       .catch((err) => {
         // console.log(err);
       });
+    this.state.daftarObat.forEach(async (data) => {
+      await db
+        .collection("reminderObat")
+        .add({ ...data })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   };
 
   handleClose() {
@@ -94,7 +127,14 @@ class Periksa extends Component {
     //   date.getDate() + " " + date.getMonth() + " " + date.getFullYear();
     // var time = date.toLocaleDateString("en-US");
     const buatBody = (
-      <Card style={{ margin: "100px auto", width: "500px" }}>
+      <Card
+        style={{
+          maxHeight: "90vh",
+          overflowY: "auto",
+          margin: "30px auto",
+          width: "500px",
+        }}
+      >
         <CardContent>
           <form style={{ textAlign: "center" }} onSubmit={this.buatRekamMedis}>
             <Typography variant="h5">Buat Rekam Medis</Typography>
@@ -124,19 +164,66 @@ class Periksa extends Component {
               value={this.state.keterangan}
               onChange={this.handleChange}
             />
-            <TextField
-              style={{ marginBottom: "20px" }}
-              id="obat"
-              required
-              multiline
-              rows={2}
-              name="obat"
-              type="text"
-              label="Obat"
-              fullWidth
-              // value={this.state.keterangan}
-              // onChange={this.handleChange}
-            />
+            <div>
+              <div style={{ textAlign: "center" }}>
+                <Typography style={{ float: "left" }}>
+                  Jumlah Obat: {this.state.daftarObat.length}
+                </Typography>
+                <Button
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    marginTop: "5px",
+                    fontSize: "20px",
+                  }}
+                  onClick={this.addObat}
+                >
+                  +
+                </Button>
+                <Button
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    margin: "5px 0 0 20px",
+                    fontSize: "20px",
+                  }}
+                  onClick={this.removeObat}
+                >
+                  -
+                </Button>
+              </div>
+              {this.state.daftarObat.map((val, idx) => {
+                let obatID = `${idx}`;
+                return (
+                  <div key={idx}>
+                    <TextField
+                      style={{ marginBottom: "20px", width: "215px" }}
+                      id={obatID}
+                      required
+                      name="namaObat"
+                      type="text"
+                      label={`Nama Obat-${idx + 1}`}
+                      value={val.nama}
+                      onChange={this.handleChangeObat}
+                    />
+                    <TextField
+                      style={{
+                        marginBottom: "20px",
+                        marginLeft: "20px",
+                        width: "215px",
+                      }}
+                      id={obatID}
+                      required
+                      name="jadwal"
+                      type="text"
+                      label={`Jadwal Minum Obat-${idx + 1}`}
+                      value={val.jadwal}
+                      onChange={this.handleChangeObat}
+                    />
+                  </div>
+                );
+              })}
+            </div>
             <Typography variant="caption">
               Mohon cek kembali dengan teliti, karena data rekam medis tidak
               dapat diubah
@@ -387,6 +474,7 @@ class Periksa extends Component {
           {/* ) : null} */}
         </Card>
         <Modal
+          style={{}}
           open={this.state.open}
           onClose={() => this.handleClose()}
           aria-labelledby="simple-modal-title"
