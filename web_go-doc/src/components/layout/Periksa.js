@@ -8,19 +8,29 @@ import { db } from "../../util/config";
 import { CardMedia, Modal } from "@material-ui/core";
 import dayjs from "dayjs";
 import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
+var batch = db.batch();
 
 class Periksa extends Component {
   constructor(props) {
     super(props);
     this.state = {
       daftarObat: [
-        { idPasien: this.props.periksa.idPasien, namaObat: "", jadwal: "" },
+        {
+          idPeriksa: this.props.periksa.id,
+          idPasien: this.props.periksa.idPasien,
+          namaObat: "",
+          jadwal: "",
+        },
       ],
       open: false,
       cek: false,
       buat: false,
       data: false,
       pasien: {},
+      obat: [],
       dataPenyakit: "",
       keterangan: "",
     };
@@ -33,7 +43,7 @@ class Periksa extends Component {
   };
 
   handleChangeObat = (event) => {
-    console.log(event.target.id);
+    // console.log(event.target.id);
     let daftarObat = [...this.state.daftarObat];
     daftarObat[event.target.id][event.target.name] = event.target.value;
     this.setState({ daftarObat });
@@ -43,10 +53,15 @@ class Periksa extends Component {
     this.setState((prevState) => ({
       daftarObat: [
         ...prevState.daftarObat,
-        { idPasien: this.props.periksa.idPasien, namaObat: "", jadwal: "" },
+        {
+          idPeriksa: this.props.periksa.id,
+          idPasien: this.props.periksa.idPasien,
+          namaObat: "",
+          jadwal: "",
+        },
       ],
     }));
-    console.log(this.state.daftarObat);
+    // console.log(this.state.daftarObat);
   };
   removeObat = (event) => {
     this.setState((prevState) => ({
@@ -66,6 +81,21 @@ class Periksa extends Component {
       })
       .catch((err) => {
         // console.log(err);
+      });
+
+    await db
+      .collection("reminderObat")
+      .where("idPeriksa", "==", this.props.periksa.id)
+      .get()
+      .then((data) => {
+        let obat = [];
+        data.forEach((doc) => {
+          obat.push({ ...doc.data() });
+        });
+        this.setState({ obat: obat });
+      })
+      .catch((err) => {
+        // console.log(err)
       });
   }
 
@@ -94,12 +124,16 @@ class Periksa extends Component {
       .catch((err) => {
         // console.log(err);
       });
+    // console.log(this.state.daftarObat);
     this.state.daftarObat.forEach(async (data) => {
+      // console.log(data);
+      // var docRef = db.collection("reminderObat").doc();
+      // await batch.set(docRef, data);
       await db
         .collection("reminderObat")
         .add({ ...data })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     });
   };
@@ -141,6 +175,7 @@ class Periksa extends Component {
             <TextField
               style={{ margin: "20px auto" }}
               id="dataPenyakit"
+              variant="outlined"
               multiline
               required
               rows={4}
@@ -152,8 +187,9 @@ class Periksa extends Component {
               onChange={this.handleChange}
             />
             <TextField
-              style={{ marginBottom: "20px" }}
+              style={{ marginBottom: "10px" }}
               id="keterangan"
+              variant="outlined"
               required
               multiline
               rows={4}
@@ -165,11 +201,39 @@ class Periksa extends Component {
               onChange={this.handleChange}
             />
             <div>
-              <div style={{ textAlign: "center" }}>
-                <Typography style={{ float: "left" }}>
+              <div style={{ textAlign: "center", marginBottom: "5px" }}>
+                <Typography
+                  variant="h6"
+                  style={{
+                    textAlign: "center",
+                    margin: "5px",
+                  }}
+                >
                   Jumlah Obat: {this.state.daftarObat.length}
                 </Typography>
-                <Button
+
+                <IconButton
+                  size="small"
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                  }}
+                  onClick={this.addObat}
+                >
+                  <AddIcon />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    marginLeft: "10px",
+                  }}
+                  onClick={this.removeObat}
+                >
+                  <RemoveIcon />
+                </IconButton>
+                {/* <Button
                   style={{
                     backgroundColor: "#e00000",
                     color: "#fff",
@@ -190,7 +254,7 @@ class Periksa extends Component {
                   onClick={this.removeObat}
                 >
                   -
-                </Button>
+                </Button> */}
               </div>
               {this.state.daftarObat.map((val, idx) => {
                 let obatID = `${idx}`;
@@ -224,7 +288,7 @@ class Periksa extends Component {
                 );
               })}
             </div>
-            <Typography variant="caption">
+            <Typography variant="caption" style={{ marginTop: "10px" }}>
               Mohon cek kembali dengan teliti, karena data rekam medis tidak
               dapat diubah
             </Typography>
@@ -245,7 +309,14 @@ class Periksa extends Component {
       </Card>
     );
     const cekBody = (
-      <Card style={{ margin: "200px auto", maxWidth: "600px" }}>
+      <Card
+        style={{
+          maxHeight: "80vh",
+          overflowY: "auto",
+          margin: "60px auto",
+          width: "500px",
+        }}
+      >
         <CardContent style={{ textAlign: "center" }}>
           <Typography variant="h5">Cek Rekam Medis</Typography>
           <TextField
@@ -278,6 +349,43 @@ class Periksa extends Component {
               readOnly: true,
             }}
           />
+          {this.state.obat.map((val, idx) => {
+            let obatID = `${idx}`;
+            return (
+              <div key={idx}>
+                <TextField
+                  style={{ marginBottom: "20px", width: "215px" }}
+                  id={obatID}
+                  required
+                  variant="outlined"
+                  name="namaObat"
+                  type="text"
+                  label={`Nama Obat-${idx + 1}`}
+                  defaultValue={val.namaObat}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                <TextField
+                  style={{
+                    marginBottom: "20px",
+                    marginLeft: "20px",
+                    width: "215px",
+                  }}
+                  id={obatID}
+                  required
+                  variant="outlined"
+                  name="jadwal"
+                  type="text"
+                  label={`Jadwal Minum Obat-${idx + 1}`}
+                  defaultValue={val.jadwal}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+              </div>
+            );
+          })}
           <Button
             style={{
               backgroundColor: "#e00000",
@@ -294,7 +402,7 @@ class Periksa extends Component {
     );
 
     const dataBody = (
-      <Card style={{ margin: "100px auto", maxWidth: "600px" }}>
+      <Card style={{ margin: "50px auto", maxWidth: "600px" }}>
         <CardContent style={{ textAlign: "center" }}>
           <Typography variant="h5">Data Diri Pasien</Typography>
           <TextField
@@ -306,6 +414,19 @@ class Periksa extends Component {
             label="Nama Pasien"
             fullWidth
             defaultValue={pasien.nama}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            style={{ margin: "20px 0" }}
+            variant="outlined"
+            id="email"
+            name="email"
+            type="text"
+            label="Email"
+            fullWidth
+            defaultValue={pasien.gmail}
             InputProps={{
               readOnly: true,
             }}
@@ -339,6 +460,8 @@ class Periksa extends Component {
           <TextField
             style={{ margin: "20px 0" }}
             variant="outlined"
+            multiline
+            rows={2}
             id="alamat"
             name="alamat"
             type="text"
@@ -364,114 +487,124 @@ class Periksa extends Component {
       </Card>
     );
     return (
-      <div style={{ textAlign: "left" }}>
-        <Card style={{ margin: "20px", Width: "700px" }}>
-          <div style={{ display: "flex" }}>
-            <CardMedia
-              style={{ width: "120px" }}
-              image={pasien.photoURL}
-              title="User photo"
-            />
-            {/* {console.log(
+      <div>
+        <Card
+          style={{
+            margin: "20px auto",
+            maxWidth: "1000px",
+            position: "relative",
+            display: "flex",
+          }}
+        >
+          <CardMedia
+            style={{ minWidth: "150px" }}
+            image={pasien.photoURL}
+            title="User photo"
+          />
+          {/* {console.log(
               dayjs(periksa.waktuPeriksa).format("HH:mm, DD MMMM YYYY")
             )} */}
-            <CardContent>
-              {/* <img
+          <CardContent
+            style={{
+              width: "1000px",
+            }}
+          >
+            {/* <img
               alt=""
               src={pasien.photoURL}
               width="50px"
               style={{ float: "left", marginRight: "10px" }}
             /> */}
+            <div style={{ textAlign: "left" }}>
               <Typography>{pasien.nama}</Typography>
               <Typography>Keluhan: {periksa.keluhan}</Typography>
               <Typography>Jadwal Periksa: {time}</Typography>
-              {/* <Typography>Waktu Periksa: {periksa.waktuPeriksa}</Typography> */}
-            </CardContent>
-          </div>
-
-          <CardActions style={{ float: "right" }}>
-            {periksa.diterima !== "ditolak" ? (
-              <Button
-                style={{
-                  backgroundColor: "#e00000",
-                  color: "#fff",
-                  marginTop: "10px",
-                  padding: "8px 15px",
-                }}
-                size="small"
-                onClick={() => {
-                  this.setState({ data: true });
-                  this.handleOpen();
-                }}
-              >
-                Cek Data Pasien
-              </Button>
-            ) : null}
-            {periksa.diterima === "menunggu" ? (
-              <>
+            </div>
+            {/* <Typography>Waktu Periksa: {periksa.waktuPeriksa}</Typography> */}
+            <div style={{ textAlign: "right" }}>
+              {periksa.diterima !== "ditolak" ? (
                 <Button
                   style={{
                     backgroundColor: "#e00000",
                     color: "#fff",
-                    marginTop: "10px",
+                    margin: "10px 0 0 10px",
                     padding: "8px 15px",
                   }}
                   size="small"
-                  onClick={() => this.terima()}
+                  onClick={() => {
+                    this.setState({ data: true });
+                    this.handleOpen();
+                  }}
                 >
-                  Terima
+                  Cek Data Pasien
                 </Button>
+              ) : null}
+              {periksa.diterima === "menunggu" ? (
+                <>
+                  <Button
+                    style={{
+                      backgroundColor: "#e00000",
+                      color: "#fff",
+                      margin: "10px 0 0 10px",
+                      padding: "8px 15px",
+                    }}
+                    size="small"
+                    onClick={() => this.terima()}
+                  >
+                    Terima
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "#e00000",
+                      color: "#fff",
+                      margin: "10px 0 0 10px",
+                      padding: "8px 15px",
+                    }}
+                    size="small"
+                    onClick={() => this.tolak()}
+                  >
+                    Tolak
+                  </Button>
+                </>
+              ) : null}
+              {periksa.diterima === "diterima" &&
+              periksa.rekamMedis.dataPenyakit == null ? (
                 <Button
                   style={{
                     backgroundColor: "#e00000",
                     color: "#fff",
-                    marginTop: "10px",
+                    margin: "10px 0 0 10px",
                     padding: "8px 15px",
                   }}
                   size="small"
-                  onClick={() => this.tolak()}
+                  onClick={() => {
+                    this.setState({ buat: true });
+                    this.handleOpen();
+                  }}
                 >
-                  Tolak
+                  Buat Rekam Medis
                 </Button>
-              </>
-            ) : null}
-            {periksa.diterima === "diterima" &&
-            periksa.rekamMedis.dataPenyakit == null ? (
-              <Button
-                style={{
-                  backgroundColor: "#e00000",
-                  color: "#fff",
-                  marginTop: "10px",
-                  padding: "8px 15px",
-                }}
-                size="small"
-                onClick={() => {
-                  this.setState({ buat: true });
-                  this.handleOpen();
-                }}
-              >
-                Buat Rekam Medis
-              </Button>
-            ) : null}
-            {periksa.rekamMedis.dataPenyakit != null ? (
-              <Button
-                style={{
-                  backgroundColor: "#e00000",
-                  color: "#fff",
-                  marginTop: "10px",
-                  padding: "8px 15px",
-                }}
-                size="small"
-                onClick={() => {
-                  this.setState({ cek: true });
-                  this.handleOpen();
-                }}
-              >
-                Cek Rekam Medis
-              </Button>
-            ) : null}
-          </CardActions>
-          {/* ) : null} */}
+              ) : null}
+              {periksa.rekamMedis.dataPenyakit != null ? (
+                <Button
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    margin: "10px 0 0 10px",
+                    padding: "8px 15px",
+                  }}
+                  size="small"
+                  onClick={() => {
+                    this.setState({ cek: true });
+                    this.handleOpen();
+                  }}
+                >
+                  Cek Rekam Medis
+                </Button>
+              ) : null}
+              {/* ) : null} */}{" "}
+            </div>
+          </CardContent>
         </Card>
         <Modal
           style={{}}

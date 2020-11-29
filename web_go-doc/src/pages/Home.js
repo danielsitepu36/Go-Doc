@@ -24,8 +24,7 @@ class Home extends Component {
             <img
               alt=""
               src={GodocArt}
-              width="500px"
-              style={{ marginBottom: "20px" }}
+              style={{ marginBottom: "20px", maxWidth: "500px" }}
             />
           </Grid>
           <Grid

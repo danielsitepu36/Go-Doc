@@ -37,16 +37,18 @@ class DaftarPeriksa extends Component {
       <>
         <div style={{ textAlign: "center", marginLeft: "275px" }}>
           {/* {console.log(this.props.dokter)} */}
-          <Typography variant="h5" style={{ marginTop: "50px" }}>
+          <Typography variant="h4" style={{ marginTop: "50px" }}>
             {this.props.filterJudul}
           </Typography>
-          {periksa.length > 0 ? (
-            periksa
-          ) : (
-            <Typography style={{ marginTop: "30px" }}>
-              Tidak ada data pasien
-            </Typography>
-          )}
+          <div>
+            {periksa.length > 0 ? (
+              periksa
+            ) : (
+              <Typography style={{ marginTop: "30px" }}>
+                Tidak ada data pasien
+              </Typography>
+            )}
+          </div>
         </div>
       </>
     );

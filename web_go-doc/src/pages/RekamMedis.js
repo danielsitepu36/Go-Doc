@@ -33,7 +33,7 @@ class RekamMedis extends Component {
 
     await db
       .collection("pasien")
-      .where("nama", "==", this.state.query)
+      .where("gmail", "==", this.state.query)
       .limit(1)
       .get()
       .then((data) => {
@@ -51,6 +51,7 @@ class RekamMedis extends Component {
     // console.log(this.state.pasien);
 
     if (this.state.pasien.id !== undefined) {
+      // console.log(this.state.pasien.id);
       await db
         .collection("periksa")
         .where("idPasien", "==", this.state.pasien.id)
@@ -59,7 +60,7 @@ class RekamMedis extends Component {
         .then((data) => {
           let listPeriksa = [];
           data.forEach(async (doc) => {
-            //   console.log(doc.data());
+            // console.log(doc.data());
             listPeriksa.push({ ...doc.data(), id: doc.id });
           });
           this.setState({ periksa: listPeriksa, error: "" });
@@ -80,17 +81,21 @@ class RekamMedis extends Component {
     ));
     return (
       <div style={{ textAlign: "center", marginLeft: "275px" }}>
-        <Typography variant="h5">Cari Rekam Medis</Typography>
+        <Typography variant="h4">Cari Rekam Medis</Typography>
         <div style={{ margin: "20px auto", maxWidth: "500px" }}>
           <form onSubmit={this.cariPasien}>
             <TextField
-              style={{ width: "400px", marginBottom: "10px" }}
+              style={{
+                width: "300px",
+                maxWidth: "400px",
+                marginBottom: "10px",
+              }}
               id="query"
               variant="outlined"
               required
               name="query"
               type="text"
-              label="Nama Pasien"
+              label="Email Pasien"
               value={this.state.query}
               onChange={this.handleChange}
               error={this.state.error}
