@@ -15,6 +15,7 @@ import ListPeriksaAktif from '../listPeriksaAktif';
 import BuatReservasi from '../buatReservasi';
 import JadwalPraktikDokter from '../jadwalPraktikDokter';
 import UpdateProfil from '../updateProfil';
+import ReminderObat from '../reminderObat';
 import {BackHandler, Button, ToastAndroid} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
@@ -81,6 +82,14 @@ const dasar = (
       }}
     />
     <Stack.Screen
+      name="ReminderObat"
+      component={ReminderObat}
+      options={{
+        title: 'Reminder Obat',
+        ...opt,
+      }}
+    />
+    <Stack.Screen
       name="BuatReservasi"
       component={BuatReservasi}
       options={{
@@ -107,11 +116,11 @@ const dasar = (
     <Stack.Screen
       name="UpdateProfil"
       component={UpdateProfil}
-      options={{
+      options={({navigation, route}) => ({
         title: 'Update Profil',
         headerRight: () => MyButton(navigation),
         ...opt,
-      }}
+      })}
     />
   </>
 );
