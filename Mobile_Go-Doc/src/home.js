@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {Image, TouchableOpacity, View} from 'react-native';
-import {GoogleSignin} from '@react-native-community/google-signin';
-import {webClientId} from './util/config';
-import {loadUser} from './util/userStorage';
-import {CommonActions} from '@react-navigation/native';
-import {Text, Card, ThemeProvider, Icon} from 'react-native-elements';
+import React, { useState, useEffect } from 'react';
+import { Image, TouchableOpacity, View } from 'react-native';
+import { GoogleSignin } from '@react-native-community/google-signin';
+import { webClientId } from './util/config';
+import { loadUser } from './util/userStorage';
+import { CommonActions } from '@react-navigation/native';
+import { Text, Card, ThemeProvider, Icon } from 'react-native-elements';
 
 const GodocArt = require('../resource/GodocArt.png');
 
@@ -12,7 +12,7 @@ GoogleSignin.configure({
   webClientId: webClientId,
 });
 
-export default function Home({route, navigation}) {
+export default function Home({ route, navigation }) {
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -33,17 +33,17 @@ export default function Home({route, navigation}) {
     navigation.dispatch(
       CommonActions.reset({
         index: 1,
-        routes: [{name: 'UpdateProfil'}],
+        routes: [{ name: 'UpdateProfil' }],
       }),
     );
   }
 
   return (
     <ThemeProvider>
-      <View style={{marginLeft: 10, marginRight: 10}}>
+      <View style={{ marginLeft: 10, marginRight: 10 }}>
         <Card>
-          <Card.Title style={{textAlign: 'left'}}>
-            <Text h4 h4Style={{fontSize: 18}} numberOfLines={2} ellipsizeMode='tail'>
+          <Card.Title style={{ textAlign: 'left' }}>
+            <Text h4 h4Style={{ fontSize: 18 }} numberOfLines={2} ellipsizeMode='tail'>
               Selamat datang, {user.nama}
             </Text>
           </Card.Title>
@@ -52,15 +52,15 @@ export default function Home({route, navigation}) {
         </Card>
       </View>
       <TouchableOpacity
-        style={{marginLeft: 10, marginRight: 10}}
-        onPress={() => navigation.navigate('Periksa', {dataUser: user})}>
+        style={{ marginLeft: 10, marginRight: 10 }}
+        onPress={() => navigation.navigate('Periksa', { dataUser: user })}>
         <Card>
           <Image
             source={GodocArt}
             resizeMode="contain"
-            style={{alignSelf: 'center', width: 300, height: 180}}
+            style={{ alignSelf: 'center', width: 300, height: 180 }}
           />
-          <Card.Title style={{marginTop: 20}}>PERIKSA</Card.Title>
+          <Card.Title style={{ marginTop: 20 }}>PERIKSA</Card.Title>
         </Card>
       </TouchableOpacity>
       <View
@@ -71,7 +71,9 @@ export default function Home({route, navigation}) {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <TouchableOpacity style={{width: '50%'}}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ReminderObat', {dataUser: user})}
+          style={{ width: '50%' }}>
           <Card>
             <Icon
               size={40}
@@ -79,7 +81,7 @@ export default function Home({route, navigation}) {
               color="#e00000"
               name="pill"
             />
-            <Card.Title style={{marginTop: 20}}>REMINDER OBAT</Card.Title>
+            <Card.Title style={{ marginTop: 20 }}>REMINDER OBAT</Card.Title>
           </Card>
         </TouchableOpacity>
         <TouchableOpacity
@@ -89,7 +91,7 @@ export default function Home({route, navigation}) {
               diterima: true,
             })
           }
-          style={{width: '50%'}}>
+          style={{ width: '50%' }}>
           <Card>
             <Icon
               size={40}
@@ -97,7 +99,7 @@ export default function Home({route, navigation}) {
               color="#e00000"
               name="folder-shared"
             />
-            <Card.Title style={{marginTop: 20}}>RIWAYAT</Card.Title>
+            <Card.Title style={{ marginTop: 20 }}>RIWAYAT</Card.Title>
           </Card>
         </TouchableOpacity>
       </View>
