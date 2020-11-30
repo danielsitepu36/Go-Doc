@@ -124,6 +124,8 @@ export default function UpdateProfil({navigation}) {
           label="Nama Lengkap"
           placeholder="Nama Lengkap"
           defaultValue={user.nama}
+          autoCapitalize='words'
+          returnKeyLabel='done'
           onChangeText={(text) =>
             dispatch({
               type: 'ganti-nama',
@@ -163,6 +165,7 @@ export default function UpdateProfil({navigation}) {
         <Input
           label="Alamat"
           placeholder="Alamat"
+          returnKeyType='next'
           onChangeText={(text) => {
             dispatch({type: 'ganti-alamat', newAlamat: text});
           }}
@@ -171,6 +174,8 @@ export default function UpdateProfil({navigation}) {
           label="Nomor Telepon"
           placeholder="Nomor Telepon"
           keyboardType="phone-pad"
+          autoCompleteType='tel'
+          returnKeyType='done'
           onChangeText={(nomor) => {
             dispatch({type: 'ganti-nomor', newNoTelp: nomor});
           }}

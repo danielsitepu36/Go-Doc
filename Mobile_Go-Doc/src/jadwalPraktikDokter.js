@@ -51,7 +51,7 @@ export default function JadwalPraktikDokter({route, navigation}) {
         idPasien: userId,
         keluhan: keluhanPasien,
         rekamMedis: {},
-        waktuPeriksa: tanggal.toISOString(),
+        jadwalPeriksa: tanggal.toISOString(),
       })
       .then(() => {
         // alert('Periksa berhasil dibuat');
@@ -110,6 +110,13 @@ export default function JadwalPraktikDokter({route, navigation}) {
           placeholder="Masukkan keluhan"
           onChangeText={SetKeluhan}
         />
+        <Text style={{color: 'grey', marginLeft: 10, fontSize: 15}}>
+          {'Mohon memilih waktu dalam rentang sesi dokter: '}
+          <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
+            {dokter[0].sesiPeriksa}
+          </Text>
+        </Text>
+
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           <Input
             label="Jam Periksa"
@@ -152,6 +159,7 @@ export default function JadwalPraktikDokter({route, navigation}) {
             mode={mode}
             value={tanggal}
             onChange={gantiTanggal}
+            is24Hour={true}
             onTouchCancel={() => setShowCal(false)}
             // onTouchOk={() => setShowCal(false)}
           />

@@ -128,7 +128,7 @@ export default function ({route, navigation}) {
                         dataUser: dataUser,
                       })
                     }>
-                    <Card containerStyle={{height: 100}}>
+                    <Card>
                       <View style={{flex: 1, flexDirection: 'row'}}>
                         <View>
                           <Image
@@ -141,8 +141,11 @@ export default function ({route, navigation}) {
                           <Text h4 h4Style={{fontSize: 14}}>
                             {item[0].nama}
                           </Text>
-                          <Text>Spesialisasi: {item[0].spesialisasi}</Text>
-                          <Text>Alamat Praktek: {item[0].tempatPraktek}</Text>
+                          <Text style={{marginBottom: 2}}>Spesialisasi: {item[0].spesialisasi}</Text>
+                          <Text style={{marginBottom: 2}}>Alamat Praktek: {item[0].tempatPraktek}</Text>
+                          <Text style={{marginBottom: 2}}>
+                            Sesi Periksa Dokter: {item[0].sesiPeriksa}
+                          </Text>
                         </View>
                       </View>
                     </Card>
