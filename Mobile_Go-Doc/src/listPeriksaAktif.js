@@ -98,12 +98,18 @@ export default function ListPeriksaAktif({route, navigation}) {
             .collection('periksa')
             .where('idPasien', '==', state.userId)
             .get()
+            // .orderBy('jadwalPeriksa', 'desc')
             .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
                 console.log('doc.data', doc.data());
                 if (doc.data().diterima !== 'menunggu') {
                   listPeriksa.push([doc.data(), doc.id]);
                 }
+              });
+              listPeriksa.sort((a, b) => {
+                return (
+                  new Date(b[0].waktuPeriksa) - new Date(a[0].waktuPeriksa)
+                );
               });
               dispatch({type: 'FETCH_PERIKSA', periksa: listPeriksa});
             });
@@ -121,11 +127,17 @@ export default function ListPeriksaAktif({route, navigation}) {
             .collection('periksa')
             .where('idPasien', '==', state.userId)
             .where('diterima', '==', 'menunggu')
+            // .orderBy('jadwalPeriksa', 'asc')
             .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
                 console.log('doc.data', doc.data());
                 listPeriksa.push([doc.data(), doc.id]);
+              });
+              listPeriksa.sort((a, b) => {
+                return (
+                  new Date(a[0].jadwalPeriksa) - new Date(b[0].jadwalPeriksa)
+                );
               });
               dispatch({type: 'FETCH_PERIKSA', periksa: listPeriksa});
             });
@@ -160,7 +172,7 @@ export default function ListPeriksaAktif({route, navigation}) {
           data={state.daftarPeriksa}
           keyExtractor={(item) => item[1]}
           renderItem={({item}) => {
-            let date = new Date(item[0].waktuPeriksa);
+            let date = new Date(item[0].jadwalPeriksa);
             console.log(date.toLocaleTimeString());
             let dokter;
             state.dokter.forEach((dok) => {
@@ -172,12 +184,28 @@ export default function ListPeriksaAktif({route, navigation}) {
               <TouchableOpacity>
                 <Card>
                   <View style={{padding: 5}}>
-                    <Text h4 h4Style={{fontSize: 18}}>
-                      {new Date(item[0].waktuPeriksa).toLocaleString()}
-                    </Text>
+                    {diterima ? (
+                      <>
+                        <Text h4 h4Style={{fontSize: 18}}>
+                          Diperiksa pada
+                        </Text>
+                        <Text h4 h4Style={{fontSize: 18}}>
+                          {new Date(item[0].waktuPeriksa).toLocaleString()}
+                        </Text>
+                      </>
+                    ) : (
+                      <Text h4 h4Style={{fontSize: 18}}>
+                        {new Date(item[0].jadwalPeriksa).toLocaleString()}
+                      </Text>
+                    )}
                     <Text>Dokter: {dokter.nama}</Text>
                     <Text>Tempat: {dokter.tempatPraktek}</Text>
                     <Text>Keluhan : {item[0].keluhan}</Text>
+                    {diterima && (
+                      <Text>
+                        Hasil diagnosis: {item[0].rekamMedis.dataPenyakit}
+                      </Text>
+                    )}
                   </View>
                 </Card>
               </TouchableOpacity>

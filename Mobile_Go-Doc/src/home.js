@@ -29,7 +29,7 @@ export default function Home({ route, navigation }) {
     fetchData();
   }, []);
 
-  if (user.tanggalLahir === '') {
+  if (user.tanggalLahir === '' || user.alamat === '' || user.noTelp === '') {
     navigation.dispatch(
       CommonActions.reset({
         index: 1,
