@@ -29,6 +29,7 @@ class DataDokter extends Component {
       str: "",
       tempatPraktek: "",
       spesialisasi: "",
+      sesiPeriksa: "",
     };
   }
 
@@ -47,6 +48,7 @@ class DataDokter extends Component {
       tanggalLahir: this.state.tanggalLahir,
       jenisKelamin: this.state.jenisKelamin,
       tempatPraktek: this.state.tempatPraktek,
+      sesiPeriksa: this.state.sesiPeriksa,
       isVerified: "menunggu",
     });
     this.setState({
@@ -129,6 +131,17 @@ class DataDokter extends Component {
                     fullWidth
                     required
                     value={this.state.tempatPraktek}
+                    onChange={this.handleChange}
+                    style={{ marginTop: "15px" }}
+                  />
+                  <TextField
+                    id="sesiPeriksa"
+                    name="sesiPeriksa"
+                    type="text"
+                    label="Jadwal Sesi Periksa"
+                    fullWidth
+                    required
+                    value={this.state.sesiPeriksa}
                     onChange={this.handleChange}
                     style={{ marginTop: "15px" }}
                   />

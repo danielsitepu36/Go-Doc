@@ -80,7 +80,12 @@ class RekamMedis extends Component {
       <Periksa key={data.id} periksa={data} />
     ));
     return (
-      <div style={{ textAlign: "center", marginLeft: "275px" }}>
+      <div
+        style={{
+          textAlign: "center",
+          // marginLeft: "275px"
+        }}
+      >
         <Typography variant="h4">Cari Rekam Medis</Typography>
         <div style={{ margin: "20px auto", maxWidth: "500px" }}>
           <form onSubmit={this.cariPasien}>

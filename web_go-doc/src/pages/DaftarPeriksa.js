@@ -14,10 +14,17 @@ class DaftarPeriksa extends Component {
 
   async componentDidMount() {
     // console.log(this.props.dokter);
+    // let orderBased = "jadwalPeriksa";
+    // let order = "asc";
+    // if (this.props.filterPeriksa === "diperiksa") {
+    //   orderBased = "waktuPeriksa";
+    //   order = "desc";
+    // }
     await db
       .collection("periksa")
       .where("idDokter", "==", `${this.props.uid}`)
       .where("diterima", "==", `${this.props.filterPeriksa}`)
+      // .orderBy(orderBased, order)
       .onSnapshot((data) => {
         // console.log(data);
         let listPeriksa = [];
@@ -25,6 +32,15 @@ class DaftarPeriksa extends Component {
           // console.log(this.props.filterPeriksa);
           listPeriksa.push({ ...doc.data(), id: doc.id });
         });
+        if (this.props.filterPeriksa === "diperiksa") {
+          listPeriksa.sort(function (a, b) {
+            return new Date(b.waktuPeriksa) - new Date(a.waktuPeriksa);
+          });
+        } else {
+          listPeriksa.sort(function (a, b) {
+            return new Date(a.jadwalPeriksa) - new Date(b.jadwalPeriksa);
+          });
+        }
         this.setState({ periksa: listPeriksa });
       });
   }
@@ -35,9 +51,17 @@ class DaftarPeriksa extends Component {
     ));
     return (
       <>
-        <div style={{ textAlign: "center", marginLeft: "275px" }}>
+        <div
+          style={{
+            textAlign: "center",
+            //  marginLeft: "275px"
+          }}
+        >
           {/* {console.log(this.props.dokter)} */}
-          <Typography variant="h4" style={{ marginTop: "50px" }}>
+          <Typography
+            variant="h4"
+            // style={{ marginTop: "50px" }}
+          >
             {this.props.filterJudul}
           </Typography>
           <div>

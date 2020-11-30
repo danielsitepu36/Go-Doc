@@ -25,6 +25,9 @@ import GroupAdd from "@material-ui/icons/GroupAdd";
 import People from "@material-ui/icons/People";
 import Folder from "@material-ui/icons/Folder";
 import Profile from "@material-ui/icons/AccountBox";
+import AssignmentInd from "@material-ui/icons/AssignmentInd";
+import PersonAddDisabled from "@material-ui/icons/PersonAddDisabled";
+import AssignmentTurnedIn from "@material-ui/icons/AssignmentTurnedIn";
 
 import RekamMedis from "./RekamMedis";
 
@@ -112,7 +115,10 @@ class Dashboard extends Component {
                   onClick={() => this.setDashboard(text)}
                 >
                   <ListItemIcon>
-                    {index === 0 ? <GroupAdd /> : <People />}
+                    {index === 0 ? <GroupAdd /> : null}
+                    {index === 1 ? <AssignmentInd /> : null}
+                    {index === 2 ? <PersonAddDisabled /> : null}
+                    {index === 3 ? <AssignmentTurnedIn /> : null}
                   </ListItemIcon>
                   <ListItemText primary={text} />
                 </ListItem>

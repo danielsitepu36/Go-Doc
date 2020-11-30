@@ -9,6 +9,10 @@ import GodocLogo from "../assets/GodocLogo.png";
 import { Grid, Typography } from "@material-ui/core";
 
 class Home extends Component {
+  componentDidMount() {
+    document.body.style.backgroundColor = "#fff";
+  }
+
   render() {
     return (
       <>

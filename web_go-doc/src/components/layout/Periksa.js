@@ -11,6 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
+
 var batch = db.batch();
 
 class Periksa extends Component {
@@ -33,6 +34,7 @@ class Periksa extends Component {
       obat: [],
       dataPenyakit: "",
       keterangan: "",
+      waktuPeriksa: null,
     };
   }
 
@@ -83,6 +85,20 @@ class Periksa extends Component {
         // console.log(err);
       });
 
+    // await db
+    //   .doc(`/periksa/${this.props.periksa.id}`)
+    //   .collection("reminderObat")
+    //   .get()
+    //   .then((data) => {
+    //     let obat = [];
+    //     data.forEach((doc) => {
+    //       obat.push({ ...doc.data() });
+    //     });
+    //     this.setState({ obat: obat });
+    //   })
+    //   .catch((err) => {
+    //     // console.log(err)
+    //   });
     await db
       .collection("reminderObat")
       .where("idPeriksa", "==", this.props.periksa.id)
@@ -116,6 +132,7 @@ class Periksa extends Component {
       .doc(`/periksa/${this.props.periksa.id}`)
       .update({
         diterima: "diperiksa",
+        waktuPeriksa: this.state.waktuPeriksa.toISOString(),
         rekamMedis: {
           dataPenyakit: this.state.dataPenyakit,
           keterangan: this.state.keterangan,
@@ -149,13 +166,17 @@ class Periksa extends Component {
   handleOpen() {
     this.setState({
       open: true,
+      waktuPeriksa: new Date(),
     });
   }
 
   render() {
     const periksa = this.props.periksa;
     const pasien = this.state.pasien;
-    const time = dayjs(periksa.waktuPeriksa).format("HH:mm, DD MMMM YYYY");
+    const time = dayjs(periksa.jadwalPeriksa).format("HH:mm, DD MMMM YYYY");
+    const periksaTime = dayjs(periksa.waktuPeriksa).format(
+      "HH:mm, DD MMMM YYYY"
+    );
     // var date = new Date(periksa.waktuPeriksa * 1000);
     // var time =
     //   date.getDate() + " " + date.getMonth() + " " + date.getFullYear();
@@ -166,22 +187,38 @@ class Periksa extends Component {
           maxHeight: "90vh",
           overflowY: "auto",
           margin: "30px auto",
-          width: "500px",
+          width: "600px",
         }}
       >
         <CardContent>
           <form style={{ textAlign: "center" }} onSubmit={this.buatRekamMedis}>
             <Typography variant="h5">Buat Rekam Medis</Typography>
+
             <TextField
               style={{ margin: "20px auto" }}
+              InputLabelProps={{ shrink: true }}
+              id="waktuPeriksa"
+              variant="outlined"
+              required
+              name="waktuPeriksa"
+              type="text"
+              label="Waktu Pembuatan Rekam Medis"
+              fullWidth
+              value={this.state.waktuPeriksa}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+            <TextField
+              style={{ marginBottom: "20px" }}
               id="dataPenyakit"
               variant="outlined"
               multiline
               required
-              rows={4}
+              rows={2}
               name="dataPenyakit"
               type="text"
-              label="Data Penyakit"
+              label="Nama Penyakit (Bisa dilihat pasien)"
               fullWidth
               value={this.state.dataPenyakit}
               onChange={this.handleChange}
@@ -195,7 +232,7 @@ class Periksa extends Component {
               rows={4}
               name="keterangan"
               type="text"
-              label="Keterangan"
+              label="Rekam Medis / Keterangan (Hanya bisa dilihat dokter)"
               fullWidth
               value={this.state.keterangan}
               onChange={this.handleChange}
@@ -218,9 +255,9 @@ class Periksa extends Component {
                     backgroundColor: "#e00000",
                     color: "#fff",
                   }}
-                  onClick={this.addObat}
+                  onClick={this.removeObat}
                 >
-                  <AddIcon />
+                  <RemoveIcon />
                 </IconButton>
                 <IconButton
                   size="small"
@@ -229,41 +266,21 @@ class Periksa extends Component {
                     color: "#fff",
                     marginLeft: "10px",
                   }}
-                  onClick={this.removeObat}
-                >
-                  <RemoveIcon />
-                </IconButton>
-                {/* <Button
-                  style={{
-                    backgroundColor: "#e00000",
-                    color: "#fff",
-                    marginTop: "5px",
-                    fontSize: "20px",
-                  }}
                   onClick={this.addObat}
                 >
-                  +
-                </Button>
-                <Button
-                  style={{
-                    backgroundColor: "#e00000",
-                    color: "#fff",
-                    margin: "5px 0 0 20px",
-                    fontSize: "20px",
-                  }}
-                  onClick={this.removeObat}
-                >
-                  -
-                </Button> */}
+                  <AddIcon />
+                </IconButton>
               </div>
               {this.state.daftarObat.map((val, idx) => {
                 let obatID = `${idx}`;
                 return (
                   <div key={idx}>
                     <TextField
-                      style={{ marginBottom: "20px", width: "215px" }}
+                      style={{ marginTop: "20px", width: "260px" }}
                       id={obatID}
+                      variant="outlined"
                       required
+                      multiline
                       name="namaObat"
                       type="text"
                       label={`Nama Obat-${idx + 1}`}
@@ -272,12 +289,14 @@ class Periksa extends Component {
                     />
                     <TextField
                       style={{
-                        marginBottom: "20px",
+                        marginTop: "20px",
                         marginLeft: "20px",
-                        width: "215px",
+                        width: "260px",
                       }}
                       id={obatID}
+                      variant="outlined"
                       required
+                      multiline
                       name="jadwal"
                       type="text"
                       label={`Jadwal Minum Obat-${idx + 1}`}
@@ -288,10 +307,12 @@ class Periksa extends Component {
                 );
               })}
             </div>
-            <Typography variant="caption" style={{ marginTop: "10px" }}>
-              Mohon cek kembali dengan teliti, karena data rekam medis tidak
-              dapat diubah
-            </Typography>
+            <div style={{ marginTop: "20px" }}>
+              <Typography variant="caption">
+                Mohon cek kembali dengan teliti, karena data rekam medis tidak
+                dapat diubah
+              </Typography>
+            </div>
             <Button
               type="submit"
               style={{
@@ -313,21 +334,36 @@ class Periksa extends Component {
         style={{
           maxHeight: "80vh",
           overflowY: "auto",
-          margin: "60px auto",
-          width: "500px",
+          margin: "70px auto",
+          width: "600px",
         }}
       >
         <CardContent style={{ textAlign: "center" }}>
           <Typography variant="h5">Cek Rekam Medis</Typography>
           <TextField
+            style={{ margin: "20px auto" }}
+            InputLabelProps={{ shrink: true }}
+            id="waktuPeriksa"
+            variant="outlined"
+            required
+            name="waktuPeriksa"
+            type="text"
+            label="Waktu Pembuatan Rekam Medis"
+            fullWidth
+            value={periksaTime}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
             style={{ margin: "20px 0" }}
             id="cekPenyakit"
             multiline
             variant="outlined"
-            rows={4}
+            rows={2}
             name="cekPenyakit"
             type="text"
-            label="Data Penyakit"
+            label="Nama Penyakit (Bisa dilihat pasien)"
             fullWidth
             defaultValue={periksa.rekamMedis.dataPenyakit}
             InputProps={{
@@ -342,7 +378,7 @@ class Periksa extends Component {
             rows={4}
             name="cekKeterangan"
             type="text"
-            label="Data keterangan"
+            label="Rekam Medis / Keterangan (Hanya bisa dilihat dokter)"
             fullWidth
             defaultValue={periksa.rekamMedis.keterangan}
             InputProps={{
@@ -354,9 +390,10 @@ class Periksa extends Component {
             return (
               <div key={idx}>
                 <TextField
-                  style={{ marginBottom: "20px", width: "215px" }}
+                  style={{ marginBottom: "20px", width: "260px" }}
                   id={obatID}
                   required
+                  multiline
                   variant="outlined"
                   name="namaObat"
                   type="text"
@@ -370,10 +407,11 @@ class Periksa extends Component {
                   style={{
                     marginBottom: "20px",
                     marginLeft: "20px",
-                    width: "215px",
+                    width: "260px",
                   }}
                   id={obatID}
                   required
+                  multiline
                   variant="outlined"
                   name="jadwal"
                   type="text"
@@ -506,7 +544,7 @@ class Periksa extends Component {
             )} */}
           <CardContent
             style={{
-              width: "1000px",
+              flex: 1,
             }}
           >
             {/* <img
@@ -516,29 +554,17 @@ class Periksa extends Component {
               style={{ float: "left", marginRight: "10px" }}
             /> */}
             <div style={{ textAlign: "left" }}>
-              <Typography>{pasien.nama}</Typography>
+              <Typography>
+                {pasien.nama} {` (${pasien.gmail})`}
+              </Typography>
               <Typography>Keluhan: {periksa.keluhan}</Typography>
               <Typography>Jadwal Periksa: {time}</Typography>
+              {periksa.waktuPeriksa !== undefined ? (
+                <Typography>Waktu Diperiksa: {periksaTime}</Typography>
+              ) : null}
             </div>
             {/* <Typography>Waktu Periksa: {periksa.waktuPeriksa}</Typography> */}
             <div style={{ textAlign: "right" }}>
-              {periksa.diterima !== "ditolak" ? (
-                <Button
-                  style={{
-                    backgroundColor: "#e00000",
-                    color: "#fff",
-                    margin: "10px 0 0 10px",
-                    padding: "8px 15px",
-                  }}
-                  size="small"
-                  onClick={() => {
-                    this.setState({ data: true });
-                    this.handleOpen();
-                  }}
-                >
-                  Cek Data Pasien
-                </Button>
-              ) : null}
               {periksa.diterima === "menunggu" ? (
                 <>
                   <Button
@@ -569,21 +595,35 @@ class Periksa extends Component {
               ) : null}
               {periksa.diterima === "diterima" &&
               periksa.rekamMedis.dataPenyakit == null ? (
-                <Button
-                  style={{
-                    backgroundColor: "#e00000",
-                    color: "#fff",
-                    margin: "10px 0 0 10px",
-                    padding: "8px 15px",
-                  }}
-                  size="small"
-                  onClick={() => {
-                    this.setState({ buat: true });
-                    this.handleOpen();
-                  }}
-                >
-                  Buat Rekam Medis
-                </Button>
+                <>
+                  <Button
+                    style={{
+                      backgroundColor: "#e00000",
+                      color: "#fff",
+                      margin: "10px 0 0 10px",
+                      padding: "8px 15px",
+                    }}
+                    size="small"
+                    onClick={() => this.tolak()}
+                  >
+                    Tolak
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "#e00000",
+                      color: "#fff",
+                      margin: "10px 0 0 10px",
+                      padding: "8px 15px",
+                    }}
+                    size="small"
+                    onClick={() => {
+                      this.setState({ buat: true });
+                      this.handleOpen();
+                    }}
+                  >
+                    Buat Rekam Medis
+                  </Button>
+                </>
               ) : null}
               {periksa.rekamMedis.dataPenyakit != null ? (
                 <Button
@@ -602,7 +642,24 @@ class Periksa extends Component {
                   Cek Rekam Medis
                 </Button>
               ) : null}
-              {/* ) : null} */}{" "}
+
+              {periksa.diterima !== "ditolak" ? (
+                <Button
+                  style={{
+                    backgroundColor: "#e00000",
+                    color: "#fff",
+                    margin: "10px 0 0 10px",
+                    padding: "8px 15px",
+                  }}
+                  size="small"
+                  onClick={() => {
+                    this.setState({ data: true });
+                    this.handleOpen();
+                  }}
+                >
+                  Cek Data Pasien
+                </Button>
+              ) : null}
             </div>
           </CardContent>
         </Card>

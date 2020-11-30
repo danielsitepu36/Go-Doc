@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { db } from "../util/config";
-import Dashboard from "./Dashboard";
+import Dashboard from "./DashboardV3";
 import DataDokter from "./DataDokter";
 import HomeNavbar from "../components/layout/HomeNavbar";
 import Rejected from "./verify/Rejected";
