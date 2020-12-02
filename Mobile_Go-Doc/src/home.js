@@ -48,7 +48,7 @@ export default function Home({ route, navigation }) {
             </Text>
           </Card.Title>
           <Card.Divider />
-          <Text>Jadwal minum obat selanjutnya: -</Text>
+          <Text>Silakan pilih menu</Text>
         </Card>
       </View>
       <TouchableOpacity
