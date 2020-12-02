@@ -22,10 +22,10 @@ Go-Doc adalah sebuah _platform_ penghubung transaksi antara dokter dan pasien se
 ## Demo
 https://go-doc-ad60f.firebaseapp.com/
 
-## Catatan Penting
+## Catatan
 Penulisan kode dalam proyek ini dilakukan bersama-sama menggunakan Visual Studio Code Live Share sehingga terdapat aktivitas _commit_ yang signifikan pada salah satu akun kontributor.
 
 ## Kontributor
-Alexius Adhitya K     - 18/424179/PA/18284\
-Daniel Suranta S      - 18/424185/PA/18290\
+Alexius Adhitya K     - 18/424179/PA/18284 \
+Daniel Suranta S      - 18/424185/PA/18290 \
 Fransiskus Rian W. P. - 18/427592/PA/18552
