@@ -117,7 +117,7 @@ export default function ReminderObat({route, navigation}) {
             {/* {console.log('doctors:', state.doctors)} */}
             <Text
               style={{fontSize: 28, alignSelf: 'center', fontWeight: 'bold'}}>
-              Daftar Dokter
+              Daftar Reminder Obat
             </Text>
             <Text></Text>
             <Text style={{fontSize: 18, marginLeft: 20}}>
