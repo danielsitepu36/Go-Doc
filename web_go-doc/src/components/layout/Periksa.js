@@ -24,6 +24,7 @@ class Periksa extends Component {
           idPasien: this.props.periksa.idPasien,
           namaObat: "",
           jadwal: "",
+          aktif: true
         },
       ],
       open: false,
@@ -60,6 +61,7 @@ class Periksa extends Component {
           idPasien: this.props.periksa.idPasien,
           namaObat: "",
           jadwal: "",
+          aktif: true,
         },
       ],
     }));
